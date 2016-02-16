@@ -3,13 +3,14 @@ import os
 import game
 
 class dbsc2():
-	def __init__(self,name_of_db):
+	def __init__(self,name_of_db,limit_matrix=10000,limit_apm=10000):
 		self.name=name_of_db
 		#storage of games through the name of player1
 		#which means that for each replay we have two games
 		self.players={}
-		self.limit_matrix=10000
-		self.limit_apm=10000
+		self.limit_matrix=limit_matrix
+		self.limit_matrix_low=0
+		self.limit_apm=limit_apm
 		self.normalize=True
 		#for scikit to be calculated from self.players when needed
 		self.liste_of_player=[] #to be sorted to get classes name in scikit
@@ -19,6 +20,8 @@ class dbsc2():
 		#other data that can be computed
 		self.meanAPM={}
 ######## a few information method
+	def isInDb(self,player):
+		return (player in self.players.keys())
 	def showPlayers(self):
 		s=0
 		g=0
@@ -42,7 +45,7 @@ class dbsc2():
 				self.liste_p1_of_games.append(g.player1)
 
 #########  method to update games info such that matrix with the same limit
-	def calculateAllMatrix(self,limit=10000,normalize=True):
+	def calculateAllMatrix(self,limit=10000,limitlow=0,normalize=True):
 		self.limit_matrix=limit
 		self.normalize=normalize
 		for p in self.players:
@@ -70,8 +73,7 @@ class dbsc2():
 				self.meanAPM[p]=-1
 		#methods to fill this db from directories 
 	def addDirectory(self,path):
-		#we only add files .SC2Relayp1 and .SC2Relayp2"
-		  
+		#we only add files .SC2Relayp1 and .SC2Relayp2" 
 		som=0
 		for dirname, dirnames, filenames in os.walk(path):
 			for filename in filenames:

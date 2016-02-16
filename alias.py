@@ -19,7 +19,8 @@ alias=[['forgg','m\xc7\x82forgg','millforgg'],
 ['taeja','liquidtaeja'],
 ['jaedong','egjd'],
 ['jim','igjim'],
-["iasonu","igia","igiaprime"]
+["iasonu","igia","igiaprime"],
+["creator","creatorprime"]
 ]
 
 def get(name):

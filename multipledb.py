@@ -1,0 +1,123 @@
+#sc2-guessplayer
+import dbsc2
+import estimator
+import utils
+class multipleDB():
+	def __init__(self):
+		self.DBs={}
+		self.limit_matrix=10000
+		self.limit_APM=10000
+	def addDb(self,name,path):
+		db=dbsc2.dbsc2(name)		
+		db.addDirectory(path)	
+		self.DBs[name]=db
+		self.estimator=estimator.PPVEstimator()
+	###method to update all matrix or APM
+	def updateAllMatrixAlldb(self,limit=10000,limitlow=0):
+		self.limit_matrix=limit 
+		for db in self.DBs:
+			self.DBs[db].calculateAllMatrix(limit,limitlow)
+	
+	def updateAllAPMAlldb(self,limit=10000):
+		self.limit_APM=limit 
+		for db in self.DBs:
+			self.DBs[db].calculateAllAPM(limit)
+			self.DBs[db].calculateMeanAPM()
+	##method to evaluate db against other db using estimator or scikit
+	
+	def evaluateDB(self,db1,dbtest,method="manhattan",option=2):
+		if type(db1)==str:
+			db1=self.DBs[db1]
+		if type(dbtest)==str:
+			dbtest=self.DBs[dbtest]
+		#both db are now real db object and not name or number		
+		#here we give data as a dict hence the False
+		self.estimator.fit(db1,False)
+		
+		#now we predict for every game in dbtest
+		result=[]
+		target=[]
+		s=0
+		for player in dbtest.players:
+			if db1.isInDb(player):
+				s+=1
+				print ("player {0} is being predicted, number {1}".format(player,s))
+				for game in dbtest.players[player]:
+					result.append(self.estimator.predictByPlayer(game,method,option))
+					target.append(game.player1)
+		return (result,target)
+		
+	def scoreEval(self,result,target):
+		#result are for now a simple list of name
+		#target is also a simple list of name
+		s=0
+		for i in range(len(result)):
+			if result[i]==target[i]:
+					s+=1
+		print(s)
+		return float(s)/len(result)	
+	def evaluateProba(self,db1,dbtest,method="manhattan",option=2):
+		#same as evaluate but now we return the dict of proba by using giveProba which is not a proba but the score min score for each player
+		if type(db1)==str:
+			db1=self.DBs[db1]
+		if type(dbtest)==str:
+			dbtest=self.DBs[dbtest]
+		self.estimator.fit(db1,False)
+		result=[]
+		target=[]
+		s=0
+		for player in dbtest.players:
+			if db1.isInDb(player):
+				s+=1
+				print ("player {0} is being given probas, number {1}".format(player,s))
+				for game in dbtest.players[player]:
+					result.append(self.estimator.giveProba(game,method,option))
+					target.append(game)
+					
+		return (result,target)
+	def scoreProba(self,resproba,target):
+		#resproba is a list of sorted ordered dict with name as key and (value,game) as value
+		s=0
+		for i in range(len(resproba)):
+			
+			a=utils.getPosition(target[i].player1,resproba[i])
+			
+			if (a>0):
+				print("{7}:{0}: Guess1 {1} with value {2} |position of {0}: {3} with value {4}|apm of {0}:{5} apm of {1}: {6}".
+				format(target[i].player1,resproba[i][0][0],resproba[i][0][1],a,resproba[i][a][1],target[i].APM,resproba[i][0][2].APM,i))
+				s+=1
+		print("number of failure {0}".format(s))
+##################### TEST #######################
+def main():
+	print("run test")
+	test()
+#test path needs to have bad replay
+#test path need to have bad p1 or p2 files	
+def test():
+	 #test rapide 
+	#testpath="replaytest/2"
+	#testpath2="replaytest/1"
+	
+	#test long
+	testpath="replayofficial/WCS15Season2"
+	testpath2="replayofficial/WCS15Season3"
+	m=multipleDB()
+	print ("test :addindg two dbs from ")
+	m.addDb("1",testpath)
+	m.addDb("2",testpath2)
+	print("test: updating matrix")
+	#m.updateAllMatrixAlldb()
+	print("test: updating APM")
+	#m.updateAllAPMAlldb()
+	print("test: evaluate DB")
+	#m.DBs["2"].showPlayers()
+	#res,tar=m.evaluateDB("1","2","basic")
+	print("test:evaluate Proba")
+	res,target=m.evaluateProba("1","2")
+	m.scoreProba(res,target)
+	print("END TEST")
+	#print(m.scoreEval(res,tar))
+if __name__ == '__main__':
+    main()
+    		
+		

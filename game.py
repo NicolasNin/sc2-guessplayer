@@ -32,7 +32,7 @@ class game():
 		self.date=date
 		self.length=length
 		
-	def calculate_matrix(self,limit=10000):
+	def calculate_matrix(self,limit=10000,limitelow=0):
 		self.matrix_calculated_with_limits=limit
 		#initalize 10X10 matrix kinda dirty
 		self.matrix=[[0]*10,[0]*10,[0]*10,[0]*10,[0]*10,[0]*10,[0]*10,[0]*10,[0]*10,[0]*10]
@@ -40,11 +40,12 @@ class game():
 		last=min(limit,self.last_frame)
 		for i in range(len(self.hotkeys)):
 			touche=self.hotkeys[i]
-			if self.frame[i]>last:
-				break
-			if prev!=-1:
-				self.matrix[prev][touche]+=1
-			prev=touche
+			if self.frame[i]> limitelow:
+				if self.frame[i]>last:
+					break
+				if prev!=-1:
+					self.matrix[prev][touche]+=1
+				prev=touche
 	def normalize_matrix(self):
 		utils.normalize_matrix(self.matrix)
 	def calculateAPMj1(self,limit=10000):
