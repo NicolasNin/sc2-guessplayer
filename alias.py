@@ -1,6 +1,7 @@
 #sc2-guessplayer
 #alias of players
 
+#problem with hero herO and bunny kr bunny eu
 alias=[['forgg','m\xc7\x82forgg','millforgg'],
 ['tlo','liquidtlo'],
 ['mana','liquidmana'],
@@ -9,7 +10,7 @@ alias=[['forgg','m\xc7\x82forgg','millforgg'],
 ['yoefwvanilla','fwvanilla'],
 ['fwslam','yoefwslam'],
 ['ret','liquidret'],
-['toodmingcn','zootoodming'],
+['toodming','toodmingcn','zootoodming'],
 ['has','fwhas'],
 ['macsed','igmacsed'],
 ['snute','liquidsnute'],
@@ -20,8 +21,10 @@ alias=[['forgg','m\xc7\x82forgg','millforgg'],
 ['jaedong','egjd'],
 ['jim','igjim'],
 ["iasonu","igia","igiaprime"],
-["creator","creatorprime"]
+["creator","creatorprime"],
+["bunny","liquidbunny"]
 ]
+
 
 def get(name):
 	name=name.lower()

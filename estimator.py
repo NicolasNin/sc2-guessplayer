@@ -85,7 +85,7 @@ class PPVEstimator():
 			return utils.manhattan(game1.matrix,game2.matrix)
 		elif method=="apm":
 			s=utils.manhattan(game1.matrix,game2.matrix)
-			ecartapm=abs(game1.APM-game2.APM)/min(game1.APM,game2.APM)
+			ecartapm=abs(max(game1.APM,game2.APM))/min(game1.APM,game2.APM)-1
 			s=s+math.pow(ecartapm,option)
 			return s
 			

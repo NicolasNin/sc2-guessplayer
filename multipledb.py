@@ -78,6 +78,8 @@ class multipleDB():
 	def scoreProba(self,resproba,target):
 		#resproba is a list of sorted ordered dict with name as key and (value,game) as value
 		s=0
+		bad_failure=0
+		bad_replay=0
 		for i in range(len(resproba)):
 			
 			a=utils.getPosition(target[i].player1,resproba[i])
@@ -86,7 +88,21 @@ class multipleDB():
 				print("{7}:{0}: Guess1 {1} with value {2} |position of {0}: {3} with value {4}|apm of {0}:{5} apm of {1}: {6}".
 				format(target[i].player1,resproba[i][0][0],resproba[i][0][1],a,resproba[i][a][1],target[i].APM,resproba[i][0][2].APM,i))
 				s+=1
-		print("number of failure {0}".format(s))
+				if(a>2):
+					bad_failure+=1
+				if(resproba[i][0][1]>1):
+					bad_replay+=1
+		print("Number of games: {0},number of failure {1}({2})% , number of bad failure(>2) {3}({5}%) ,failure not bad {8}, bad replay {4}({6}%) bad failure less bad replay {7}({9}%)| ".format(
+		len(target),						
+		s,									
+		round(float(s)/len(target)*100,3),	
+		bad_failure,
+		bad_replay,
+		round(float(bad_failure)/len(target)*100,2)
+		,round(float(bad_replay)/len(target)*100,2)
+		,bad_failure-bad_replay		#7
+		,s-bad_failure,
+		round(float(s-bad_failure)/len(target),2)))
 ##################### TEST #######################
 def main():
 	print("run test")
