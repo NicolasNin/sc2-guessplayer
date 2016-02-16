@@ -8,3 +8,21 @@ analyse a replay or a db through different stats:
 --> look at the time between hotkey : %age of 0, %age of 1 etc...
 --> 
 
+visualization:
+--> hotkey=f(frame) scater plot
+--> visualize matrix of a player
+--> matrix of corelation between two player (or the same)
+
+web-interface:
+--> python server and cgi script with pickle ?
+--> model 2 (mvc)
+
+----------TIME FRAME ----------------
+Mer 10/02 20h:  can analyse replay and have first view of hotkey scater
+Jeu 11/02 15h:  got result at 85% no data on %
+Ven 12/02 20h:  got an evaluation of algos, looks for autocorelation and simple corellation
+Sam 13:02 -- :  Not working
+Dim 14/02    :  file p1 and p2, looks to improve the structure of code, start using scikit with mixed results
+Lun 15/02 20h:  Code anew to have a better structure more akin to scikit estimator, add APM feature,create github
+Mar 16/02 14h:  Test APM with different Database (working a few hours)
+Time spent: around 5 days 
