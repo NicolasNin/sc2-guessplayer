@@ -1,0 +1,10 @@
+TODO
+------------------
+test other features
+
+------------------
+analyse a replay or a db through different stats:
+--> look at the pure frequency of hotkeys
+--> look at the time between hotkey : %age of 0, %age of 1 etc...
+--> 
+
