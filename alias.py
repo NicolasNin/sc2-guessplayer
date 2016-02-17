@@ -22,7 +22,9 @@ alias=[['forgg','m\xc7\x82forgg','millforgg'],
 ['jim','igjim'],
 ["iasonu","igia","igiaprime"],
 ["creator","creatorprime"],
-["bunny","liquidbunny"]
+["bunny","liquidbunny"],
+["harstem","fnticharstem"],
+["mystery","jieshi"] 
 ]
 
 

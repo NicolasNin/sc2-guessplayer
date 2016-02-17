@@ -72,7 +72,7 @@ class PPVEstimator():
 					if (a<mini):
 						mini=a
 						game_best=g
-				distance[p]=(mini,g)
+				distance[p]=(mini,game_best)
 	#	valueoftarget=s["game.player1"][0]
 		s=collections.OrderedDict(sorted(distance.items(), key=lambda t: t[1]))
 		
@@ -80,12 +80,18 @@ class PPVEstimator():
 		for (i,v) in s.items():
 			l.append((i,v[0],v[1]))	
 		return l
-	def score(self,game1,game2,method="manhattan",option=2):
+	def score(self,game1,game2,method="manhattan",option=2,maxgap=15):
 		if method=="manhattan":
 			return utils.manhattan(game1.matrix,game2.matrix)
 		elif method=="apm":
 			s=utils.manhattan(game1.matrix,game2.matrix)
-			ecartapm=abs(max(game1.APM,game2.APM))/min(game1.APM,game2.APM)-1
+			ecartapm=(max(game1.APM,game2.APM)/min(game1.APM,game2.APM))-1
 			s=s+math.pow(ecartapm,option)
 			return s
+		elif method=="frequency":
+			ecartapm=abs(max(game1.APM,game2.APM))/min(game1.APM,game2.APM)-1
+			return utils.distancearray(game1.frequency_of_hotkeys,game2.frequency_of_hotkeys)+math.pow(ecartapm,option)
+		elif method=="gap":
+			s=utils.manhattan(game1.matrix,game2.matrix)
+			return utils.distancedict(game1.frequency_of_gap,game2.frequency_of_gap,maxgap)+s
 			

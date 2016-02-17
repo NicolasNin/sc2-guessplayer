@@ -5,18 +5,35 @@ test other features
 ------------------
 analyse a replay or a db through different stats:
 --> look at the pure frequency of hotkeys
---> look at the time between hotkey : %age of 0, %age of 1 etc...
+--> look at the time between hotkey : % of 0, % of 1 etc...
 --> fn hotkey
 
 visualization:
 --> hotkey=f(frame) scater plot
 --> visualize matrix of a player
 --> matrix of corelation between two player (or the same)
-
+--> hotkey cycle in a circle viz
 web-interface:
 --> python server and cgi script with pickle ?
 --> model 2 (mvc)
 
+OTHER:
+try to paralelize NN search (openmp??)
+write code to use scikit
+--> separate each db in 3 dbs... can be done in the db class
+-->then you have to do every test on each 3 DB for each race
+
+--> calculate corelation between players of 2 db (or oneself)
+--> compute the graph of plyaers and display it
+write something to have per player stats (ie percentage of failure )
+
+improve the score structure:
+indeed: we have as feature for now:
+-matrix (2 cycle) ->100
+-frequency(1 cycle)->10
+-"APM"
+-gap frequency  --> maxgap feature
+we should be able to have a mix of those with parameter and weight
 ----------TIME FRAME ----------------
 Mer 10/02 20h:  can analyse replay and have first view of hotkey scater
 Jeu 11/02 15h:  got result at 85% no data on %
@@ -24,5 +41,9 @@ Ven 12/02 20h:  got an evaluation of algos, looks for autocorelation and simple 
 Sam 13:02 -- :  Not working
 Dim 14/02    :  file p1 and p2, looks to improve the structure of code, start using scikit with mixed results
 Lun 15/02 20h:  Code anew to have a better structure more akin to scikit estimator, add APM feature,create github
-Mar 16/02 14h:  Test APM with different Database (working a few hours)
+Mar 16/02 14h:  Test APM with different Database (working a few hours) add features to test in the night
 Time spent: around 5 days 
+
+
+
+----ALL IDEAS for analyze game-------------

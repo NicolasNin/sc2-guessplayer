@@ -50,15 +50,23 @@ class dbsc2():
 		self.normalize=normalize
 		for p in self.players:
 			for g in self.players[p]:
-				g.calculate_matrix(limit)
+				g.calculate_matrix(limit,limitlow)
 				if normalize:
 					g.normalize_matrix()
+	def calculateAllFrequency(self,limit=10000,limitlow=0,normalize=True):
+		self.limit_matrix=limit
+		for p in self.players:
+			for g in self.players[p]:
+				g.calculate_frequency(limit,limitlow)
+				
 	
 	def calculateAllAPM(self,limit=10000):
 		self.limit_apm=limit
 		for p in self.players:
 			for g in self.players[p]:
 				g.calculateAPMj1(limit)
+				
+				
 	def calculateMeanAPM(self):
 		for p in self.players:
 			s=0
@@ -114,6 +122,8 @@ class dbsc2():
 		if (len(frames)!=0):
 			g=game.game(name1,name2,race1,race2,hotkeys,frames,path=filename)
 			g.calculate_matrix(self.limit_matrix)
+			g.calculate_frequency(self.limit_matrix)
+			g.calculateFrequencyGap()
 			g.normalize_matrix()
 			g.calculateAPMj1(self.limit_apm)
 			
@@ -143,6 +153,7 @@ def test():
 	db.calculateAllMatrix()
 	db.calculateMeanAPM()
 	db.calculateAllAPM()
+	db.calculateAllFrequency()
 	print("")
 	db.showInfoPlayer("maru")
 	print("")
