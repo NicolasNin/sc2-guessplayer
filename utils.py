@@ -1,5 +1,10 @@
 #sc2-guessplayer
-
+def minnotnul(l):
+	mini=-1
+	for i in l:
+		if i!=0 and(mini>i or mini==-1):
+			mini=i
+	return mini
 def normalize_matrix(matrix):
 	somme=0
 	for i in matrix:
@@ -42,7 +47,7 @@ def getPosition(name,liste):
 	for i in range(len(liste)):
 		if (name==liste[i][0]):
 			return i
-	return +1	
+	return -1	
 ##################### TEST #######################
 def main():
 	print("run test")

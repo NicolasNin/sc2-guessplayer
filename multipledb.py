@@ -7,11 +7,12 @@ class multipleDB():
 		self.DBs={}
 		self.limit_matrix=10000
 		self.limit_APM=10000
+		self.estimator=estimator.PPVEstimator()
 	def addDb(self,name,path):
 		db=dbsc2.dbsc2(name)		
 		db.addDirectory(path)	
 		self.DBs[name]=db
-		self.estimator=estimator.PPVEstimator()
+		
 	###method to update all matrix or APM
 	def updateAllMatrixAlldb(self,limit=10000,limitlow=0):
 		self.limit_matrix=limit 
@@ -25,7 +26,7 @@ class multipleDB():
 			self.DBs[db].calculateMeanAPM()
 	##method to evaluate db against other db using estimator or scikit
 	
-	def evaluateDB(self,db1,dbtest,method="manhattan",option=2):
+	def evaluateDB(self,db1,dbtest,method="manhattan",option=2,fail=False,coefMat=1,coefGap=1,coefApm=1,coefFreq=1):
 		if type(db1)==str:
 			db1=self.DBs[db1]
 		if type(dbtest)==str:
@@ -41,9 +42,9 @@ class multipleDB():
 		for player in dbtest.players:
 			if db1.isInDb(player):
 				s+=1
-				print ("player {0} is being predicted, number {1}".format(player,s))
+				#print ("player {0} is being predicted, number {1}".format(player,s))
 				for game in dbtest.players[player]:
-					result.append(self.estimator.predictByPlayer(game,method,option))
+					result.append(self.estimator.predictByPlayer(game,method,option,coefMat,coefGap,coefApm,coefFreq))
 					target.append(game.player1)
 		return (result,target)
 		
@@ -54,9 +55,8 @@ class multipleDB():
 		for i in range(len(result)):
 			if result[i]==target[i]:
 					s+=1
-		print(s)
 		return float(s)/len(result)	
-	def evaluateProba(self,db1,dbtest,method="manhattan",option=2,fail=False):
+	def evaluateProba(self,db1,dbtest,method="manhattan",option=2,fail=False,coefMat=1,coefGap=1,coefApm=1,coefFreq=1):
 		#same as evaluate but now we return the dict of proba by using giveProba which is not a proba but the score min score for each player
 		if type(db1)==str:
 			db1=self.DBs[db1]
@@ -72,11 +72,11 @@ class multipleDB():
 				s+=1
 				str2=""
 				if not isin:
-					str2="while not in db"
+					str2=" while not in db"
 				print (("player {0} is being given probas, number {1}"+str2).format(player,s))
 				
 				for game in dbtest.players[player]:
-					result.append(self.estimator.giveProba(game,method,option))
+					result.append(self.estimator.giveProba(game,method,option,coefMat,coefGap,coefApm,coefFreq))
 					target.append(game)
 					
 		return (result,target)
@@ -122,6 +122,20 @@ class multipleDB():
 		,bad_failure-bad_replay		#7
 		,s-bad_failure,
 		round(float(s-bad_failure)/len(target),2)))
+	def scoreProbaByPLayer(self,resproba,target):
+		dtotal={}
+		d0={}
+		for i in range(len(target)):
+			p=target[i].player1
+			a=utils.getPosition(p,resproba[i])
+			dtotal[p]=dtotal.get(p,0)+1
+			if a==0:
+				d0[p]=d0.get(p,0)+1
+				
+		for p in dtotal:
+			print("{0} is at {3}% of success ({1} good,{4} bad, total: {2})".format(p,d0.get(p,0),dtotal[p],round(100*float(d0.get(p,0))/dtotal[p],2), dtotal[p]-d0.get(p,0)))
+			
+			
 ##################### TEST #######################
 def main():
 	print("run test")
@@ -148,8 +162,10 @@ def test():
 	#m.DBs["2"].showPlayers()
 	#res,tar=m.evaluateDB("1","2","basic")
 	print("test:evaluate Proba")
-	res,target=m.evaluateProba("1","2","gap",fail=True)
-	m.scoreProba(res,target,-1)
+	res,target=m.evaluateDB("1","2","gap",coefMat=1,coefGap=1,coefApm=0,coefFreq=0)
+	print(m.scoreEval(res,target))
+	#res,target=m.evaluateProba("1","2","gap",fail=True,coefMat=1,coefGap=1,coefApm=0,coefFreq=0)
+	#m.scoreProba(res,target,-1)
 	print("END TEST")
 	#print(m.scoreEval(res,tar))
 if __name__ == '__main__':

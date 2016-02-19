@@ -1,7 +1,7 @@
 #sc2-guessplayer
 import os
 import game
-
+import convert
 class dbsc2():
 	def __init__(self,name_of_db,limit_matrix=10000,limit_apm=10000):
 		self.name=name_of_db
@@ -98,11 +98,22 @@ class dbsc2():
 					som2+=1				
 	def addReplay(self,path):
 		if (os.path.exists(path+"p1") and os.path.exists(path+"p1")):
-			self.addReplayFromData(path+"p1")
-			self.addReplayFromData(path+"p2")
+			g1=self.addReplayFromData(path+"p1")
+			g2=self.addReplayFromData(path+"p2")
 		else:
-			print(path +"not converted")
-			
+			print(path +"not yetconverted")
+			(g1,g2)=convert.convertReplay(path)
+			if g1!="error":
+				g1.calculateAllFeatures(self.limit_matrix,0,self.limit_apm)
+				if g1.player1 not in self.players:
+					self.players[g1.player1]=[]
+				self.players[g1.player1].append(g1)
+			if g2!="error":
+				g2.calculateAllFeatures(self.limit_matrix,0,self.limit_apm)
+				if g2.player1 not in self.players:
+					self.players[g2.player1]=[]
+				self.players[g2.player1].append(g2)
+			return (g1,g2)	
 	def addReplayFromData(self,filename):
 		#we add the p1 and p2 files
 		#print("add "+ filename +"to "+self.name)
@@ -120,19 +131,21 @@ class dbsc2():
 		#create the game ,verify that list are not empty
 		#compute matrix and APM of games 
 		if (len(frames)!=0):
+			
 			g=game.game(name1,name2,race1,race2,hotkeys,frames,path=filename)
-			g.calculate_matrix(self.limit_matrix)
-			g.calculate_frequency(self.limit_matrix)
-			g.calculateFrequencyGap()
-			g.normalize_matrix()
-			g.calculateAPMj1(self.limit_apm)
+			g.calculateAllFeatures(self.limit_matrix,0,self.limit_apm)
+			#g.calculate_matrix(self.limit_matrix)
+			#g.calculate_frequency(self.limit_matrix)
+			#g.calculateFrequencyGap()
+			#g.normalize_matrix()
+			#g.calculateAPMj1(self.limit_apm)
 			
 			if g.player1 not in self.players:
 				self.players[g.player1]=[]
 			self.players[g.player1].append(g)
 		else:
 			print("empty replay",filename)
-			
+		return 	g
 
 ##################### TEST #######################
 def main():

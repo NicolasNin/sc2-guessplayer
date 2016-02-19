@@ -34,6 +34,12 @@ class game():
 		self.mapsc2=mapsc2
 		self.date=date
 		self.length=length
+	def calculateAllFeatures(self,limit=10000,limitlow=0,limit_apm=10000):
+		self.calculate_matrix(limit,limitlow)
+		self.calculate_frequency(limit,limitlow)
+		self.calculateFrequencyGap()
+		self.normalize_matrix()
+		self.calculateAPMj1(limit_apm)
 	def calculateFrequencyGap(self):
 		freq={}
 		size=len(self.frame)
@@ -87,5 +93,8 @@ class game():
 				if(i-prev<50):
 					liste_ecart.append(i-prev)
 				prev=i
-		self.APM=(float(sum(liste_ecart))/len(liste_ecart))
+		if len(liste_ecart)==0:
+			self.APM=50
+		else:	
+			self.APM=(float(sum(liste_ecart))/len(liste_ecart))
 		return self.APM		

@@ -1,6 +1,13 @@
 TODO
+-------------
+* Catch exception from sc2reader error
+* gaussiannb
+*harmonize the calcul of features when replay added
+
+--------SMALL THINGS NOT TO FORGET--------
+frequency gap functions( shoudl be unified in the end with all features)
 ------------------
-test other features
+->test other features
 
 ------------------
 analyse a replay or a db through different stats:
@@ -27,6 +34,9 @@ write code to use scikit
 --> compute the graph of plyaers and display it
 write something to have per player stats (ie percentage of failure )
 
+
+Score in estimator should be in its own class
+--> an estimator has a fit
 improve the score structure:
 indeed: we have as feature for now:
 -matrix (2 cycle) ->100

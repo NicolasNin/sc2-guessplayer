@@ -2,7 +2,7 @@
 #alias of players
 
 #problem with hero herO and bunny kr bunny eu
-alias=[['forgg','m\xc7\x82forgg','millforgg'],
+alias=[['forgg','m\xc7\x82forgg','millforgg',"millsymbolforgg"],
 ['tlo','liquidtlo'],
 ['mana','liquidmana'],
 ['hyun','roccathyun'],
@@ -24,7 +24,12 @@ alias=[['forgg','m\xc7\x82forgg','millforgg'],
 ["creator","creatorprime"],
 ["bunny","liquidbunny"],
 ["harstem","fnticharstem"],
-["mystery","jieshi"] 
+["mystery","jieshi"],
+["blaze","panic"],
+["bly","acerbly"],
+["hear","axheart"],
+["scarlett","shura"],
+["jim","igjimprime"]
 ]
 
 
