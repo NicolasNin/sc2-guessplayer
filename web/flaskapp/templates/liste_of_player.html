@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flask Template Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+
+ 
+  </head>
+  <body>
+	   <div class="row marketing">
+			<div class="container">
+			<div class="header">
+		            <nav>
+		                <ul class="nav nav-pills pull-right">
+		                    <li role="presentation" class="active"><a href="/">Home</a>
+		                    </li>
+		                    
+		                </ul>
+		            </nav>
+		            <h3 class="text-muted">Sc2 Guesser</h3>
+				</div>		
+				
+		      <p>All the players in the database</p>
+		      <ul>
+		        {% for n in liste %}
+		        <li>{{n[0]}} with {{n[1]}} replays</li>
+		        {% endfor %}
+		      </ul>
+					
+    
+			
+			
+			
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+		</div>
+
+  </body>
+</html>

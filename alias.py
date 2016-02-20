@@ -10,7 +10,7 @@ alias=[['forgg','m\xc7\x82forgg','millforgg',"millsymbolforgg"],
 ['yoefwvanilla','fwvanilla'],
 ['fwslam','yoefwslam'],
 ['ret','liquidret'],
-['toodming','toodmingcn','zootoodming'],
+['toodming','toodmingcn','zootoodming',"whaletail","zoowhaletail"],
 ['has','fwhas'],
 ['macsed','igmacsed'],
 ['snute','liquidsnute'],
@@ -29,7 +29,13 @@ alias=[['forgg','m\xc7\x82forgg','millforgg',"millsymbolforgg"],
 ["bly","acerbly"],
 ["hear","axheart"],
 ["scarlett","shura"],
-["jim","igjimprime"]
+["jim","igjimprime"],
+["neeb","neeblet"],
+["qxc","colqxc"],
+["demuslim","egdemuslim"],
+["demuslim","egdemuslim"],
+["nerchio","acernerchio"],
+["scarlett","shura"]
 ]
 
 

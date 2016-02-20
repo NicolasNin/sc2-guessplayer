@@ -2,6 +2,9 @@
 import os
 import game
 import convert
+import corelation 
+import utils
+from numpy import mean,std
 class dbsc2():
 	def __init__(self,name_of_db,limit_matrix=10000,limit_apm=10000):
 		self.name=name_of_db
@@ -19,6 +22,8 @@ class dbsc2():
 		self.liste_p1_of_games=[]
 		#other data that can be computed
 		self.meanAPM={}
+		self.ac={}
+		self.statsAC={} #contains mean and std of autocorelation
 ######## a few information method
 	def isInDb(self,player):
 		return (player in self.players.keys())
@@ -45,6 +50,30 @@ class dbsc2():
 				self.liste_p1_of_games.append(g.player1)
 
 #########  method to update games info such that matrix with the same limit
+	def calculateAC(self):	
+		for i in self.players:
+			self.ac[i]=corelation.correlation(self,i,self,i)[0]
+		return self.ac
+	def calculateStatsAc(self,method="mean"):
+		for p in self.ac:
+			l=[]
+			for i in self.ac[p]:
+				if method=="mean":
+					for j in i:
+						if (j!=0):
+							l.append(j)
+				else:
+					l.append(utils.minnotnul(i))
+			if(len(l)==0):
+				print("not enough not nul number or equivalently only one replay")
+				
+				self.statsAC[p]=(0,0)
+			self.statsAC[p]=(mean(l),std(l),len(l),len(self.ac[p][0]))
+		return self.statsAC	
+	def getProbaPlayer(self,score,player):
+		m=self.statsAC[player][0]
+		s=self.statsAC[player][1]
+		return 1-corelation.cumulativeDistribNormal(m,s,score)
 	def calculateAllMatrix(self,limit=10000,limitlow=0,normalize=True):
 		self.limit_matrix=limit
 		self.normalize=normalize
@@ -113,7 +142,7 @@ class dbsc2():
 				if g2.player1 not in self.players:
 					self.players[g2.player1]=[]
 				self.players[g2.player1].append(g2)
-			return (g1,g2)	
+		return (g1,g2)	
 	def addReplayFromData(self,filename):
 		#we add the p1 and p2 files
 		#print("add "+ filename +"to "+self.name)

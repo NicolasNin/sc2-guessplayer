@@ -1,0 +1,155 @@
+<!doctype html>
+   
+    
+    
+    
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+	   <title>Sc2 Guess</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+
+ 
+  </head>
+  <body>
+	   <div class="row marketing">
+			<div class="container">
+				<div class="header">
+		            <nav>
+		                <ul class="nav nav-pills pull-right">
+		                    <li role="presentation" class="active"><a href="/">Home</a>
+		                    </li>
+		                    
+		                </ul>
+		            </nav>
+		            <h3 class="text-muted">Sc2 Guesser</h3>
+				</div>	
+				
+				
+			    <h1>Choose a sc2 replay file </h1>
+				<form action="/upload" method=post enctype=multipart/form-data>
+				<p><input type=file name=file>
+				<input type=submit value="Guess Player">
+				</form>
+	    
+				<p> Get the <a href="liste_of_player" action= "/liste_of_player"> list</a> of player in the database</p>
+				<div class="row">
+				  <div class="col-xs-12 col-sm-6 col-md-8">.col-xs-12 .col-sm-6 .col-md-8</div>
+				  <div class="col-xs-6 col-md-4">.col-xs-6 .col-md-4</div>
+				</div>		
+				<div class="row">
+				  <div class="col-md-6">.col-md-6</div>
+				  <div class="col-md-6">.col-md-6</div>
+				</div>
+				
+				<div class=table-responsive>
+					<table class="table table-bordered table-striped"> 
+						<thead> 
+							<tr> 
+								<th></th> 
+								<th > Name guessed  </th>
+								<th > score <small>the smaller the better</small></th>
+								<th > Original name  </th>
+								<th >  Matchup</th>
+							</tr> 
+						</thead>
+						<tbody> 
+							<tr> 
+								<th class=text-nowrap scope=row>Guess 1</th> 
+								<td>Nom guess1	</td> 
+								<td >valeur </td> 
+								<td ><small>path</small> </td> 
+						</tbody>
+					
+					</table>
+				</div>
+				
+				
+				<div class=table-responsive> 
+					<table class="table table-bordered table-striped"> 
+						<thead> 
+							<tr> 
+								<th></th> 
+								<th> Extra small devices <small>Phones (&lt;768px)</small> 
+								</th> <th> Small devices <small>Tablets (&ge;768px)</small> 
+								</th> <th> Medium devices <small>Desktops (&ge;992px)</small> 
+								</th> <th> Large devices <small>Desktops (&ge;1200px)</small> 
+								</th> 
+							</tr> 
+						</thead> 
+						<tbody> 
+								<tr> 
+									<th class=text-nowrap scope=row>Grid behavior</th> 
+									<td>Horizontal at all times	</td> 
+									<td colspan=3>Collapsed to start, horizontal above breakpoints</td> 
+								</tr> 
+								<tr> 
+									<th class=text-nowrap scope=row>Container width</th> 
+									<td>None (auto)</td> <td>750px</td> <td>970px</td> 
+									<td>1170px</td> </tr> <tr> <th class=text-nowrap scope=row>Class prefix
+									</th> 
+									<td><code>.col-xs-</code></td> 
+									<td><code>.col-sm-</code></td> 
+									<td><code>.col-md-</code></td> 
+									<td><code>.col-lg-</code></td> 
+								</tr> 
+								<tr> 
+									<th class=text-nowrap scope=row># of columns</th> 
+									<td colspan=4>12</td> 
+								</tr> 
+								<tr> 
+									<th class=text-nowrap scope=row>Column width</th> 
+									<td class=text-muted>Auto</td> 
+									<td>~62px</td> 
+									<td>~81px</td> 
+									<td>~97px</td> 
+								</tr> 
+								<tr> 
+									<th class=text-nowrap scope=row>Gutter width</th> 
+									<td colspan=4>30px (15px on each side of a column)</td> 
+								</tr> 
+								<tr> 
+									<th class=text-nowrap scope=row>Nestable</th> 
+									<td colspan=4>Yes</td> 
+								</tr> 
+								<tr> 
+									<th class=text-nowrap scope=row>Offsets</th> 
+									<td colspan=4>Yes</td> 
+								</tr> 
+								<tr> 
+									<th class=text-nowrap scope=row>Column ordering</th> 
+									<td colspan=4>Yes</td> 
+								</tr> 
+						</tbody> 
+					</table> 
+				</div>
+			
+			
+			</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+				
+				    
+			</div>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+		</div>
+
+  </body>
+</html>

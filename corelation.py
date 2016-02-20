@@ -68,10 +68,39 @@ def visuHotkey(db,player,n):
 	#plt.scatter(x, y,z)
 	plt.show()
 ############################
+from numpy import mean,std
+import math
+def cumulativeDistribNormal(m,s,a):
+	return 0.5*( 1+math.erf( (a-m)/(s*math.sqrt(2))) )
+
+def getProba(db,score,player):
+	acmean=getMeanAuto(db)
+	m=acmean[player][0]
+	s=acmean[player][1]
+	return 1-cumulativeDistribNormal(m,s,score)
+	
+def getMeanAuto(db):
+	ac=autocorelation(db)
+	l=[]
+	res={}
+	for p in ac:
+		l=[]
+		for i in ac[p][0]:
+				
+			for j in i:
+				if (j!=0):
+					
+					l.append(j)
+		if(len(l)==0):
+			print("not enough not nul number or equivalently only one replay")
+			#return (0,0)
+			res[p]=(0,0)
+		res[p]=(mean(l),std(l),len(l),len(ac[p][0]))
+	return res
 def autocorelation(db):
 	ac={}
 	for i in db.players:
-		print(i,len(db.players))
+	#	print(i,len(db.players))
 		ac[i]=correlation(db,i,db,i)
 	return ac
 
@@ -91,14 +120,14 @@ def correlation(db1,p1,db2,p2):
 		for g1 in G1:
 			l=[]
 			for g2 in G2:
-				l.append(E.score(g1,g2,method="manhattan",option=2,maxgap=15,coefMat=0,coefGap=4,coefApm=0,coefFreq=0))
+				l.append(E.score(g1,g2,method="manhattan",option=2,maxgap=15,coefMat=1,coefGap=4,coefApm=0,coefFreq=0))
 			cor.append(l)
 		return (cor,G1,G2)
 	else:
 		for g1 in db1.players[p1]:
 			l=[]
 			for g2 in db2.players[p2]:
-				l.append(E.score(g1,g2,method="manhattan",option=2,maxgap=15,coefMat=1,coefGap=0,coefApm=0,coefFreq=0))
+				l.append(E.score(g1,g2,method="manhattan",option=2,maxgap=15,coefMat=1,coefGap=4,coefApm=0,coefFreq=0))
 			cor.append(l)
 		return (cor,db1.players[p1],db2.players[p2])
 
