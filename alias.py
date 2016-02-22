@@ -35,11 +35,18 @@ alias=[['forgg','m\xc7\x82forgg','millforgg',"millsymbolforgg"],
 ["demuslim","egdemuslim"],
 ["demuslim","egdemuslim"],
 ["nerchio","acernerchio"],
+["puck","mellow"],
+["major","light","windy","altaria","shofu"],
 ["scarlett","shura"]
 ]
 
 
 def get(name):
+	if name.lower()=="hero":
+		if name[0]=="H":
+			return 'HerO(Liquid)'
+		else:
+			return "hero(CJ)"
 	name=name.lower()
 	for i in alias:
 		for j in i:
