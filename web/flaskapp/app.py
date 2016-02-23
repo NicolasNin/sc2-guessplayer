@@ -3,7 +3,7 @@ from flask import Flask, render_template, request,redirect, url_for
 from werkzeug import secure_filename
 import pickle
 import sys
-sys.path.insert(0, '../../')
+sys.path.insert(0, '../../src')
 
 
 
@@ -13,19 +13,12 @@ app.config['UPLOAD_FOLDER'] = "replayuploaded"
 ALLOWED_EXTENSIONS = set(["SC2Replay"])
 
 m=pickle.load(open("../../save/db","rb"))
-
+dict_of_result={}
 def allowed_file(filename):
     return '.' in filename and \
 			filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-@app.route('/signUp',methods=['POST'])
-def signUp():
-	# read the posted values from the UI
-    _name = request.form['inputName']
-    _email = request.form['inputEmail']
-    _password = request.form['inputPassword']
-    
-    return "azraze"
+
 @app.route('/showSignUp')
 def showSignUp():
     return render_template('signup.html')
@@ -53,7 +46,64 @@ def displayResultGuess(res1,g1):
 	ret_string+="------------------------------------------\n"
 
 	return ret_string
+	
+@app.route('/analyse_replay', methods=['GET', 'POST'])
+def analyse():
+	a = request.form["file-uploaded"]
+	print("analyse replay",a)
+	print("is in dict", a in dict_of_result)
+	#return "analyse replay "+str(a)
+	if a in dict_of_result:
+		(res1,res2,g1,g2)=dict_of_result[a]
+	else:
+		return "error"
+	guess1=[]
+	value1=[]
+	guess2=[]
+	value2=[]
+	path1=[]
+	path2=[]
+	
+	for i in range(3):
+		guess1.append(res1[i][2].player1)
+		value1.append(round(res1[i][1],2))
+		guess2.append(res2[i][2].player1)
+		value2.append(round(res2[i][1],2))
+		path1.append(res1[i][2].path[15:-12])
+		path2.append(res2[i][2].path[15:-12])
+		
+		
+	return render_template('newretour.html',
+			nameinreplay1=g1.name_in_replay1,
+			nameinreplay2=g2.name_in_replay1,
+			race1=g1.race1,
+			race2=g2.race1,
+			guess1=guess1,
+			guess2=guess2,
+			value1=value1,
+			value2=value2,
+			path1=path1,
+			path2=path2
+			
+			)
+		
 @app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+	print("test upload")
+	if request.method == 'POST':
+		file = request.files['sc2replay']
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			if filename not in dict_of_result:
+				(res1,res2,g1,g2)=m.guessReplay(os.path.join(app.config['UPLOAD_FOLDER'], filename),"all",coefMat=1,coefGap=4)
+				
+				dict_of_result[filename]=(res1,res2,g1,g2)
+				#return str(os.path.join(app.config['UPLOAD_FOLDER'], filename)) 
+			return filename
+		else:
+			return "error with the file"
+	"""
 def upload_file():
 	if request.method == 'POST':
 		file = request.files['file']
@@ -74,11 +124,12 @@ def upload_file():
 			guess10=res1[0][2].player1,
 			guess20=res2[0][2].player1,
 			value10=round(res1[0][1],2),
-			value20=round(res2[0][1],2),
+			value20=round(res2[0][1],2)
 			
-			my_string="Wheeeee!", my_list=[0,1,2,3,4,5])
+			)
 		else:
 			return "file not good"
+	"""			
 @app.route("/liste_of_player")
 def liste():
 	d=m.DBs["all"].players
@@ -93,7 +144,13 @@ def liste():
 	for i in l:
 		l2.append((i,len(d[i.lower()])))	
 	return render_template("liste_of_player.html",liste=l2)
-			
+
+@app.route('/player/<playername>')
+def player(playername):
+	list_of_games=[]
+	for i in m.DBs["all"].players[playername.lower()]:
+		list_of_games.append(i.path[19:-12])
+	return render_template("player.html",name=playername,liste_games=list_of_games)		
 @app.route("/")
 def main():
 	
@@ -103,5 +160,7 @@ def main():
 	#return "Welcome!"
     
 if __name__ == "__main__":
-	app.run(debug=True,)  
+	app.run(debug=True)  
 #	app.run(debug=True,host='0.0.0.0')  
+
+
