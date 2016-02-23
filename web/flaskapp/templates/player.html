@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+	   <title>Sc2 Guess, a tool to find the players behind barcodes</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../static/uplodbtn.css" rel="stylesheet">		
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="../static/upload.js"	></script>	
+
+  </head>
+  <body>
+	   
+		<div class="container">
+				
+				  <!-- Modal -->
+			  <div class="modal fade" id="myModal" role="dialog">
+							    <div class="modal-dialog">
+							    
+									      <!-- Modal content-->
+									      <div class="modal-content">
+											        <div class="modal-header">
+												          <button type="button" class="close" data-dismiss="modal">&times;</button>
+												          <h4 class="modal-title">File Uploading</h4>
+												        </div>
+												        <div class="modal-body">
+												          <p><center><img src="../static/catbot.gif"></center></p>
+												        </div>
+												        <div class="modal-footer">
+												          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+												        </div>
+									      </div>
+									      
+							 </div>
+			  </div>
+	
+	<div class="row">	
+		<div class="col-lg-8">					
+				<nav class="navbar navbar-default">
+				  <div class="container-fluid">
+				    <div class="navbar-header">
+				      <a class="navbar-brand" href="#">Sc2Guess</a>
+				    </div>
+				    <ul class="nav navbar-nav">
+				      <li class="active"><a href="/">Home</a></li>
+				      <li><a href="/liste_of_player">Players</a></li>
+				
+				    </ul>
+				    <ul class="nav navbar-nav navbar-right btn-file">
+				      <li><a href="#"><span class="glyphicon glyphicon-cloud"></span> Upload
+				      <form id="my_form3" method="post" action="/upload" enctype="multipart/form-data" >
+						  <input type="file" name="sc2replay" id="test3">
+				      </form>
+				      </a></li>
+				      
+				    </ul>
+				  </div>
+				  
+				</nav>
+		</div>		
+	</div>			
+			
+				
+			<p>Liste of replay for {{name}}</p>
+		      <ul>
+		        {% for n in liste_games %}
+		        <li> {{n}} </li>
+		        {% endfor %}
+		      </ul>
+
+				    
+		</div>
+   
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+  </body>
+  <div class="hidden">
+  	<!--   hidden form to submit from js to the guessresult page      -->
+	<form id="hiddenform" method="post" action="/analyse_replay">
+    <input id="file-uploaded" type="hidden" name="file-uploaded" > 
+	</form>
+  </div>
+</html>
