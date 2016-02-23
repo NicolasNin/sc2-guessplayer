@@ -1,5 +1,14 @@
+//rest input field
+$(function (){
+	
+		$("#test3").val("");
+		$("#test2").val("");
+		
+	});
+
 $(function () { $('#test2').change(function() 
 				{ 
+					$('#modal-body').html("uploading"); 
 					$('#myModal').modal({
 					show: 'true'
 						}); 
@@ -19,13 +28,20 @@ $(function () { $('#test2').change(function()
 			            data: data,
 			            success: function (response) 
 			            {
+							
 							console.log(response)
 							if( response=="error with the file")
-							{alert("error")}
+							{
+								$('#test2').val("");
+								$('#modal-body').html("error with the files"); 
+							
+								
+								
+							}else{
 							
 							document.getElementById("file-uploaded").value=response;
 							document.getElementById("hiddenform").submit();
-			                
+						}
 			            }
 			        });
 				//
@@ -37,6 +53,7 @@ $(function () { $('#test2').change(function()
 			
 $(function () { $('#test3').change(function() 
 				{ 
+					$('#modal-body').html("uploading"); 
 					$('#myModal').modal({
 					show: 'true'
 						}); 
@@ -58,10 +75,14 @@ $(function () { $('#test3').change(function()
 			            {
 							console.log(response)
 							if( response=="error with the file")
-							{alert("error")}
-							
+							{	$('#test3').val("");
+								$('#modal-body').html("error with the files"); 
+								//document.getElementById('test3').value="";
+								}
+							else{
 							document.getElementById("file-uploaded").value=response;
 							document.getElementById("hiddenform").submit();
+						}
 			                
 			            }
 			        });
