@@ -2,7 +2,7 @@
 #alias of players
 
 #problem with hero herO and bunny kr bunny eu
-alias=[['forgg','m\xc7\x82forgg','millforgg',"millsymbolforgg"],
+alias=[['forgg','m\xc7\x82forgg','millforgg',"millsymbolforgg","mforgg"],
 ['tlo','liquidtlo'],
 ['mana','liquidmana'],
 ['hyun','roccathyun'],
@@ -37,7 +37,13 @@ alias=[['forgg','m\xc7\x82forgg','millforgg',"millsymbolforgg"],
 ["nerchio","acernerchio"],
 ["puck","mellow"],
 ["major","light","windy","altaria","shofu"],
-["scarlett","shura"]
+["scarlett","shura"],
+["parting","fwparting"],
+["nice","fwnice"],
+["kas","empirekas","fearless"],
+["stephano","mdstephano",],
+
+
 ]
 
 

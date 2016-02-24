@@ -74,7 +74,7 @@
 			
 			<p></p>
 			
-			
+			<div class="well">
 			<div class="guess">
 				
 				<div class="row">
@@ -85,7 +85,7 @@
 				{% for n in range(3) %}
 				<div class="row">
 					
-					<div class="col-lg-2">
+					<div class="col-lg-1">
 						 Guess  {{n+1}}
 					</div>
 					
@@ -96,17 +96,19 @@
 						{{value1[n]}}
 					</div>
 					<div class="col-lg-6"> 
-						<div class="replay-path"><small>{{path1[n]}}</small></div>
+						<div class="replay-path"><small class="hidden">{{path1[n]}}</small></div>
 					</div>
 					
 				</div>
 				 {% endfor %}
 			</div>
+			</div>
 			
 			<p></p>
 			<p></p>
 			<p></p>
-				<div class="guess">
+			
+				<div class="guess well">
 				
 				<div class="row">
 		
@@ -116,7 +118,7 @@
 				{% for n in range(3) %}
 				<div class="row">
 					
-					<div class="col-lg-2">
+					<div class="col-lg-1">
 						 Guess  {{n+1}}
 					</div>
 					
@@ -127,7 +129,7 @@
 						{{value2[n]}}
 					</div>
 					<div class="col-lg-6"> 
-						<small>{{path2[n]}}</small>
+						<small class="hidden">{{path2[n]}}</small>
 					</div>
 					
 				</div>

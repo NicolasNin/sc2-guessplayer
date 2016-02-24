@@ -16,7 +16,7 @@ class userGuess(multipledb.multipleDB):
 			self.DBs[dbname]=db
 		return (g1,g2)
 		
-	def guessReplay(self,path,dbreference,coefMat=1,coefGap=4):
+	def guessReplay(self,path,dbreference,coefMat=1,coefGap=4,coefApm=0,coefFreq=0):
 		(g1,g2)=self.addSc2Replay(path,"userReplay")
 		if g1=="error" or g2=="error":
 			return "error"
@@ -29,8 +29,8 @@ class userGuess(multipledb.multipleDB):
 			self.dbreference=dbreference
 			self.estimator.fit(self.DBs[dbreference],False)
 		#print(coefGap,coefMat)
-		res1=self.estimator.giveProba(g1,method="manhattan",option=2,coefMat=coefMat,coefGap=coefGap,coefApm=1,coefFreq=1)
-		res2=self.estimator.giveProba(g2,method="manhattan",option=2,coefMat=coefMat,coefGap=coefGap,coefApm=1,coefFreq=1)
+		res1=self.estimator.giveProba(g1,method="manhattan",option=2,coefMat=coefMat,coefGap=coefGap,coefApm=coefApm,coefFreq=coefFreq)
+		res2=self.estimator.giveProba(g2,method="manhattan",option=2,coefMat=coefMat,coefGap=coefGap,coefApm=coefApm,coefFreq=coefFreq)
 		#now we got the result as res1 and res2
 
 		self.displayResultGuess(res1,g1)
@@ -55,11 +55,16 @@ class userGuess(multipledb.multipleDB):
 			))
 		print("------------------------------------------")
 	def guessDirectory(self,path,dbreference,coefMat=1,coefGap=4):
+		l=[]
 		for dirname, dirnames, filenames in os.walk(path):
 			for filename in filenames:
 				if filename[len(filename)-10:len(filename)]==".SC2Replay":
 					print (os.path.join(dirname, filename))
-					self.guessReplay(os.path.join(dirname, filename),dbreference,coefMat,coefGap)	
+					l.append(self.guessReplay(os.path.join(dirname, filename),dbreference,coefMat,coefGap))
+		return l
+		
+	
+						
 		
 		
 			

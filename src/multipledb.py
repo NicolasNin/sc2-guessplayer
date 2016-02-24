@@ -117,7 +117,7 @@ class multipleDB():
 				else:
 					prob.append(100)
 			
-			if (a==threshold or (threshold==200 and a>0)) and prob[0]>treshProba:
+			if (a==threshold or (threshold==200 and a>0)) and (prob[0]>treshProba or math.isnan(prob[0])):
 				if(prob[0]< prob[1] or prob[0]<prob[2]):
 						probafalsenegative+=1
 						str1=("WARNING!!")
