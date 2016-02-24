@@ -9,7 +9,10 @@
 	<link href="static/uplodbtn.css" rel="stylesheet">		
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="static/upload.js"	></script>	
-
+<style>
+.progress {background: rgba(235, 217, 217, 1); border: 0px solid rgba(245, 245, 245, 1); border-radius: 4px; height: 20px;}
+.progress-bar-custom {background: rgba(66, 139, 202, 1);}
+</style>
   </head>
   <body>
 	   
@@ -41,7 +44,7 @@
 				<nav class="navbar navbar-default">
 				  <div class="container-fluid">
 				    <div class="navbar-header">
-				      <a class="navbar-brand" href="#">Sc2Guess</a>
+				      <a class="navbar-brand" href="/">Sc2Guess</a>
 				    </div>
 				    <ul class="nav navbar-nav">
 				      <li class="active"><a href="/">Home</a></li>
@@ -92,12 +95,21 @@
 					<div class="col-lg-2"> 
 						<a href="/player/{{guess1[n]}}">{{guess1[n]}} </a>
 					</div>
-					<div class="col-lg-2"> 
+					<div class="col-lg-4"> 
 						{{value1[n]}}
+						Overall Proximity score <div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="70"
+													aria-valuemin="0" aria-valuemax="100" style="width:{{value1[n]}}%">
+													<span class="sr-only">70% Complete</span>
+													</div>
+												</div>
 					</div>
 					<div class="col-lg-6"> 
 						<div class="replay-path"><small class="hidden">{{path1[n]}}</small></div>
 					</div>
+					
+				</div>
+				<div class="row">
 					
 				</div>
 				 {% endfor %}
@@ -125,8 +137,14 @@
 					<div class="col-lg-2"> 
 						<a href="/player/{{guess2[n]}}">{{guess2[n]}} </a>
 					</div>
-					<div class="col-lg-2"> 
+					<div class="col-lg-4"> 
 						{{value2[n]}}
+						Overall Proximity score <div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="70"
+													aria-valuemin="0" aria-valuemax="100" style="width:{{value2[n]}}%">
+													<span class="sr-only">70% Complete</span>
+													</div>
+												</div>
 					</div>
 					<div class="col-lg-6"> 
 						<small class="hidden">{{path2[n]}}</small>

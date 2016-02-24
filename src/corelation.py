@@ -51,7 +51,7 @@ class corelation():
 	def test(self):
 		print("test")
 	def visualizeCorelation(self,db1,liste1,db2,liste2,coefMat=1,coefGap=4,coefApm=0,coefFreq=0,groupbyname=True):
-		(mat,listeg1,listeg2)=self.corelation(db1,liste1,db2,liste2,coefMat=1,coefGap=0,coefApm=0,coefFreq=0)
+		(mat,listeg1,listeg2)=self.corelation(db1,liste1,db2,liste2,coefMat=coefMat,coefGap=coefGap,coefApm=coefApm,coefFreq=coefFreq)
 		self.VisualizeMatrix(mat,listeg1,listeg2,True,groupbyname=groupbyname)
 	def VisualizeMatrix(self,matrix,listegames1,listegames2,display=False,groupbyname=True,path="img/corelation"):			
 		alpha=[];beta=[]
@@ -99,6 +99,14 @@ class corelation():
 			ax.set_xticks(sizex)
 			ax.set_xticklabels(beta)	
 		else:
+			for i in listegames1:
+				print(i.path)
+			print("")
+				
+			for i in listegames2:
+				print(i.path)
+			print("")
+				
 			ax.set_xticklabels([''] +beta)
 			ax.set_yticklabels([''] +alpha)
 			ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
@@ -113,7 +121,9 @@ class corelation():
 		fig.savefig(path+name)
 		return name		
 
-
+import math
+def cumulativeDistribNormal(m,s,a):
+	return 0.5*( 1+math.erf( (a-m)/(s*math.sqrt(2))) )
 """
 fig = plt.figure()
 ax = fig.add_subplot(111)

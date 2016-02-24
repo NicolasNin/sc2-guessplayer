@@ -30,17 +30,23 @@ $(function () { $('#test2').change(function()
 			            {
 							
 							console.log(response)
-							if( response=="error with the file")
+							if( response=="extension error")
 							{
 								$('#test2').val("");
-								$('#modal-body').html("error with the files"); 
+								$('#modal-body').html("error with the file extension"); 
 							
 								
 								
 							}else{
+								if(response="error"){
+									$('#test2').val("");
+								$('#modal-body').html("error with the replay, maybe it's not a 1v1"); 
+								}
+							else{
 							
-							document.getElementById("file-uploaded").value=response;
-							document.getElementById("hiddenform").submit();
+								document.getElementById("file-uploaded").value=response;
+								document.getElementById("hiddenform").submit();
+							}
 						}
 			            }
 			        });
@@ -76,12 +82,19 @@ $(function () { $('#test3').change(function()
 							console.log(response)
 							if( response=="error with the file")
 							{	$('#test3').val("");
-								$('#modal-body').html("error with the files"); 
-								//document.getElementById('test3').value="";
+								$('#modal-body').html("error with the file extension"); 
+							
 								}
 							else{
-							document.getElementById("file-uploaded").value=response;
-							document.getElementById("hiddenform").submit();
+								if(response=="error"){
+									$('#test3').val("");
+								$('#modal-body').html("error with replay, maybe not a  1v1"); 
+
+								}
+								else{
+								document.getElementById("file-uploaded").value=response;
+								document.getElementById("hiddenform").submit();
+							}
 						}
 			                
 			            }

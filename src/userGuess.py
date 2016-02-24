@@ -19,7 +19,7 @@ class userGuess(multipledb.multipleDB):
 	def guessReplay(self,path,dbreference,coefMat=1,coefGap=4,coefApm=0,coefFreq=0):
 		(g1,g2)=self.addSc2Replay(path,"userReplay")
 		if g1=="error" or g2=="error":
-			return "error"
+			return ("error","error","error","error")
 		#we have to test each player against dbreference
 		#first we fit the data to the estimator (here we just give it the db)
 		# but with different estimator

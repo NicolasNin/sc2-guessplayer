@@ -50,9 +50,11 @@ class dbsc2():
 				self.liste_p1_of_games.append(g.player1)
 
 #########  method to update games info such that matrix with the same limit
-	def calculateAC(self):	
+	def calculateAC(self):
+		c=corelation.corelation()
 		for i in self.players:
-			self.ac[i]=corelation.correlation(self,i,self,i)[0]
+			(mat,l1,l2)=c.corelation(self,i,self,i)
+			self.ac[i]=mat
 		return self.ac
 	def calculateStatsAc(self,method="mean"):
 		for p in self.ac:
@@ -71,6 +73,7 @@ class dbsc2():
 			self.statsAC[p]=(mean(l),std(l),len(l),len(self.ac[p][0]))
 		return self.statsAC	
 	def getProbaPlayer(self,score,player):
+		
 		m=self.statsAC[player][0]
 		s=self.statsAC[player][1]
 		return 1-corelation.cumulativeDistribNormal(m,s,score)
