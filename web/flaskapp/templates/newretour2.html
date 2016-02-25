@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+	   <title>Sc2 Guess, a tool to find the player behind barcodes</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="static/uplodbtn.css" rel="stylesheet">		
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="static/upload.js"	></script>	
+<style>
+	.row-notop {
+	padding-top:0;
+    margin-top: 0px;
+}
+	.row-nobottom {
+	padding-bottom:0;
+    margin-bottom: 0px;
+}
+.progress {background: rgba(235, 217, 217, 1); border: 0px solid rgba(245, 245, 245, 1); border-radius: 4px; height: 20px;}
+.progress-bar-custom {background: rgba(66, 139, 202, 1);}
+.progress-hotkey {background: rgba(235, 217, 217, 1); border: 0px solid rgba(245, 245, 245, 1); border-radius: 4px; height: 13px;}
+.hotkeybar {background: rgba(201, 65, 183, 1);}
+.gapbar {background: rgba(69, 201, 65, 1);}
+.APMbar {background: rgba(201, 137, 65, 1);}
+</style>
+  </head>
+  <body>
+	   
+		<div class="container">
+				
+				  <!-- Modal -->
+			  <div class="modal fade" id="myModal" role="dialog">
+							    <div class="modal-dialog">
+							    
+									      <!-- Modal content-->
+									      <div class="modal-content">
+											        <div class="modal-header">
+												          <button type="button" class="close" data-dismiss="modal">&times;</button>
+												          <h4 class="modal-title">File Uploading</h4>
+												        </div>
+												        <div class="modal-body">
+												          <p><center><img src="static/catbot.gif"></center></p>
+												        </div>
+												        <div class="modal-footer">
+												          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+												        </div>
+									      </div>
+									      
+							 </div>
+			  </div>
+	
+	<div class="row">	
+		<div class="col-lg-8">					
+				<nav class="navbar navbar-default">
+				  <div class="container-fluid">
+				    <div class="navbar-header">
+				      <a class="navbar-brand" href="/">Sc2Guess</a>
+				    </div>
+				    <ul class="nav navbar-nav">
+				      <li class="active"><a href="/">Home</a></li>
+				      <li><a href="/liste_of_player">Players</a></li>
+				
+				    </ul>
+				    <ul class="nav navbar-nav navbar-right btn-file">
+				      <li><a href="#"><span class="glyphicon glyphicon-cloud"></span> Upload
+				      <form id="my_form3" method="post" action="/upload" enctype="multipart/form-data" >
+						  <input type="file" name="sc2replay" id="test3">
+				      </form>
+				      </a></li>
+				      
+				    </ul>
+				  </div>
+				  
+				</nav>
+		</div>		
+	</div>			
+			
+				
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="info-replay-uploaded">
+						<h3>{{nameinreplay1}}({{race1}}) VS {{nameinreplay2}}({{race2}})</h3>
+					</div>
+				</div>
+			</div>	
+			<div class="well">
+			<div class="row">
+				<div class="col-lg-6"> <h4> Three first guesses for {{nameinreplay1}}</h4></div> 	
+				<div class="col-lg-6"> <h4> Three first guesses for {{nameinreplay2}}</h4></div> 	
+			
+			</div>	
+			{% for n in range(3) %}
+			<div class="row">
+					<div class="col-lg-1">	Guess  {{n+1}}</div>
+					
+					<div class="col-lg-2"> 	<a href="/player/{{guess1[n]}}">{{guess1[n]}} </a>	</div>
+					<div class="col-lg-3"> 						
+						Overall Proximity score : {{value1[n][0]}}% 
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="70"
+													aria-valuemin="0" aria-valuemax="100" style="width:{{value1[n][0]}}%">
+													<span class="sr-only">70% Complete</span>
+													</div>
+												</div>
+					</div>
+					
+					<div class="col-lg-1">	Guess  {{n+1}}</div>
+					<div class="col-lg-2"> 	<a href="/player/{{guess2[n]}}">{{guess2[n]}} </a>	</div>
+					<div class="col-lg-3"> 						
+						Overall Proximity score : {{value2[n][0]}}% 
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" aria-valuenow="70"
+													aria-valuemin="0" aria-valuemax="100" style="width:{{value2[n][0]}}%">
+													<span class="sr-only">70% Complete</span>
+													</div>
+												</div>
+					</div>
+			</div>
+			<div class="row  row-notop">
+					<div class="col-lg-2"><a href="/replays/{{guess1[n]}}/all/{{number1[n]}}"><small>matched replay</small></a></div>
+					<div class="col-lg-2">Hotkey proximity {{value1[n][1]}}</div>
+					<div class="col-lg-2">
+								<div class="progress-hotkey">
+													<div class="progress-bar hotkeybar" role="progressbar" aria-valuenow="70"
+													aria-valuemin="0" aria-valuemax="100" style="width:{{(2-value1[n][1])/2*100}}%">
+													<span class="sr-only">70% Complete</span>
+													</div>
+								</div>						
+					</div>
+					<div class="col-lg-2"><a href="/replays/{{guess2[n]}}/all/{{number2[n]}}"><small>matched replay</small></a></div>
+					<div class="col-lg-2">Hotkey proximity {{value2[n][1]}}</div>
+					<div class="col-lg-2">
+								<div class="progress-hotkey">
+													<div class="progress-bar hotkeybar" role="progressbar" aria-valuenow="70"
+													aria-valuemin="0" aria-valuemax="100" style="width:{{(2-value2[n][1])/2*100}}%">
+													<span class="sr-only">70% Complete</span>
+													</div>
+								</div>						
+					</div>		
+					
+			</div>
+			<div class="row  row-notop">
+					<div class="col-lg-2"><a href="/compare/{{filename}}/0/{{guess1[n]}}"><small>compare with player</small></a></div>
+					<div class="col-lg-2">Gap proximity {{value1[n][2]}}</div>
+					<div class="col-lg-2">
+								<div class="progress-hotkey">
+													<div class="progress-bar gapbar" role="progressbar" aria-valuenow="70"
+													aria-valuemin="0" aria-valuemax="100" style="width:{{(1-value1[n][2])*100}}%">
+													<span class="sr-only">70% Complete</span>
+													</div>
+								</div>						
+					</div>
+					<div class="col-lg-2"><a href="/compare/{{filename}}/1/{{guess2[n]}}"><small>compare with player</small></a></div>
+					<div class="col-lg-2">Gap proximity {{value2[n][2]}}</div>
+					<div class="col-lg-2">
+								<div class="progress-hotkey">
+													<div class="progress-bar gapbar" role="progressbar" aria-valuenow="70"
+													aria-valuemin="0" aria-valuemax="100" style="width:{{(1-value2[n][2])*100}}%">
+													<span class="sr-only">70% Complete</span>
+													</div>
+								</div>						
+					</div>
+					
+					
+				</div>
+				<div class="row  row-notop">
+					<div class="col-lg-2"></div>
+					<div class="col-lg-2">APM proximity {{value1[n][3]}}</div>
+					<div class="col-lg-2">
+								<div class="progress-hotkey">
+													<div class="progress-bar APMbar" role="progressbar" aria-valuenow="70"
+													aria-valuemin="0" aria-valuemax="100" style="width:{{(1-value1[n][3])*100}}%">
+													<span class="sr-only">70% Complete</span>
+													</div>
+								</div>						
+					</div>
+					<div class="col-lg-2"></div>
+					<div class="col-lg-2">APM proximity {{value2[n][3]}}</div>
+					<div class="col-lg-2">
+								<div class="progress-hotkey">
+													<div class="progress-bar APMbar" role="progressbar" aria-valuenow="70"
+													aria-valuemin="0" aria-valuemax="100" style="width:{{(1-value2[n][3])*100}}%">
+													<span class="sr-only">70% Complete</span>
+													</div>
+								</div>						
+					</div>
+					
+					
+				</div>
+				<br><br>				
+			 {% endfor %}
+			</div><!-- well-->
+
+
+
+
+				    
+		</div>
+   
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+  </body>
+  <div class="hidden">
+  	<!--   hidden form to submit from js to the guessresult page      -->
+	<form id="hiddenform" method="post" action="/analyse_replay">
+    <input id="file-uploaded" type="hidden" name="file-uploaded" > 
+	</form>
+  </div>
+</html>
