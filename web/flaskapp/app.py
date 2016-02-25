@@ -215,7 +215,8 @@ def player(playername):
 		
 
 	print("ici",os.getcwd())
-	return render_template("player.html",name=playername,liste_path_games=list_of_path_of_games,img_corel="../../"+path+imagename,
+	path="img/corelation/"
+	return render_template("player.html",name=playername,liste_path_games=list_of_path_of_games,img_corel=path+imagename,
 	number=list_of_number,
 	player1=list_of_player1,
 	player2=list_of_player2,
