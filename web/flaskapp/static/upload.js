@@ -38,7 +38,7 @@ $(function () { $('#test2').change(function()
 								
 								
 							}else{
-								if(response="error"){
+								if(response=="error"){
 									$('#test2').val("");
 								$('#modal-body').html("error with the replay, maybe it's not a 1v1"); 
 								}
@@ -80,7 +80,7 @@ $(function () { $('#test3').change(function()
 			            success: function (response) 
 			            {
 							console.log(response)
-							if( response=="error with the file")
+							if( response=="extension error")
 							{	$('#test3').val("");
 								$('#modal-body').html("error with the file extension"); 
 							

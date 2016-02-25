@@ -2,9 +2,9 @@ import sys,os
 from flask import Flask, render_template, request,redirect, url_for
 from werkzeug import secure_filename
 import pickle
-import sys
 sys.path.insert(0, '../../src')
 import corelation
+import estimator
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = "replayuploaded"
@@ -76,6 +76,18 @@ def probaarrache(x):
 		return (30*(-4*x+8)*(-4*x+8)/9)+1
 	else:
 		return 2/x 
+def getNumber(player,path):
+	if player in m.DBs["all"].players:
+		for g in range(len(m.DBs["all"].players[player])):
+			if m.DBs["all"].players[player][g].path==path:
+				return g
+	return "not found"
+def getAllScore(g1,g2):
+	E=estimator.PPVEstimator()
+	d_hotkey=E.score(g1,g2,method="manhattan",option=2,maxgap=15,coefMat=1,coefGap=0,coefApm=0,coefFreq=0)
+	d_gap=E.score(g1,g2,method="manhattan",option=2,maxgap=15,coefMat=0,coefGap=4,coefApm=0,coefFreq=0)
+	d_apm=E.score(g1,g2,method="manhattan",option=1,maxgap=15,coefMat=0,coefGap=0,coefApm=1,coefFreq=0)
+	return(d_hotkey,d_gap,d_apm)
 @app.route('/analyse_replay', methods=['GET', 'POST'])
 def analyse():
 	a = request.form["file-uploaded"]
@@ -92,20 +104,24 @@ def analyse():
 	value2=[]
 	path1=[]
 	path2=[]
-	
+	number1=[]
+	number2=[]
 	for i in range(3):
+		(dh,dg,da)=getAllScore(g1,res1[i][2])
 		guess1.append(res1[i][2].player1)
-		print(round( probaarrache(res1[i][1]) ,2),res1[i][1])
-
-		value1.append(round( probaarrache(res1[i][1]) ,2))
+		(dh,dg,da)=getAllScore(g1,res1[i][2])
+		value1.append( (round(probaarrache(res1[i][1]),2),round(dh,2),round(dg,2),round(da,2)))	
 		guess2.append(res2[i][2].player1)
-		print(round( probaarrache(res2[i][1]) ,2),res2[i][1])
-		value2.append(round(probaarrache(res2[i][1]),2))
+		(dh,dg,da)=getAllScore(g2,res2[i][2])
+		value2.append(( round(probaarrache(res2[i][1]),2) ,round(dh,2),round(dg,2),round(da,2)))
 		path1.append(res1[i][2].path[15:-12])
 		path2.append(res2[i][2].path[15:-12])
+		number1.append( getNumber(res1[i][2].player1,res1[i][2].path))
+		number2.append( getNumber(res2[i][2].player1,res2[i][2].path))
 		
 		
-	return render_template('newretour.html',
+		
+	return render_template('newretour2.html',
 			nameinreplay1=g1.name_in_replay1,
 			nameinreplay2=g2.name_in_replay1,
 			race1=g1.race1,
@@ -115,7 +131,10 @@ def analyse():
 			value1=value1,
 			value2=value2,
 			path1=path1,
-			path2=path2
+			path2=path2,
+			number1=number1,
+			number2=number2,
+			filename=a
 			
 			)
 		
@@ -159,7 +178,6 @@ def liste():
 def player(playername):
 	
 	playername2=getDBname(playername)
-	print("aa",playername,playername2)
 	list_of_number=[]
 	list_of_path_of_games=[]
 	list_of_player1=[]
@@ -169,13 +187,16 @@ def player(playername):
 	list_of_dates=[]
 	list_of_event=[]
 	
-	c=corelation.corelation()
+	
 	#create auto corelation png
-	db1=m.DBs["all"]
-	(mat,listeg1,listeg2)=c.corelation(db1,playername2,db1,playername2,coefMat=1,coefGap=0,coefApm=0,coefFreq=0)
 	path="static/img/corelation/"
-	imagename=c.VisualizeMatrix(mat,listeg1,listeg2,display=False,groupbyname=False,path=path)
-	print (imagename)
+	imagename="auto"+playername+".png"
+	if not os.path.exists(path+imagename):
+		c=corelation.corelation()
+		db1=m.DBs["all"]
+		(mat,listeg1,listeg2)=c.corelation(db1,playername2,db1,playername2,coefMat=1,coefGap=0,coefApm=0,coefFreq=0)
+		imagename=c.VisualizeMatrix(mat,listeg1,listeg2,display=False,groupbyname=False,path=path,name="auto"+playername+".png")
+		print (imagename)
 	num=-1	
 	for i in m.DBs["all"].players[getDBname(playername)]:
 		num+=1
@@ -192,7 +213,7 @@ def player(playername):
 			list_of_event.append(i.path[18:18+3])
 		list_of_path_of_games.append(i.path[18:-12])
 		
-	import os
+
 	print("ici",os.getcwd())
 	return render_template("player.html",name=playername,liste_path_games=list_of_path_of_games,img_corel="../../"+path+imagename,
 	number=list_of_number,
@@ -202,16 +223,62 @@ def player(playername):
 	race2=list_of_race2,
 	event=list_of_event,
 	date=list_of_dates
-	)		
-@app.route("/")
+	)
+@app.route('/replays/<player>/<db>/<number>'	)
+def replayinfo(player,db,number):
+	playerDB=getDBname(player)
+	number=int(number)
+	if (db in m.DBs):
+		print(player,db,number)
+		if (playerDB in m.DBs[db].players):
+			if len(m.DBs[db].players[playerDB])>=number:
+				g=m.DBs[db].players[playerDB][number]
+				return render_template("info_replay.html",
+				p1=g.player1,
+				p2=g.player2,
+				race1=g.race1,
+				race2=g.race2,
+				path=g.path
+				)
+	return "404 biatch"
+@app.route('/')	
 def main():
-	
-	
 	return render_template('id.html')
+@app.route("/compare/<filename>/<n>/<player>")
+def compare(filename,n,player):
+	#we need to compute one replay against all of a player
+	#we need the info on the filename and the player
+	n=int(n)
+	if filename in dict_of_result:
+		if n==0 or n==1:
+			gprout=dict_of_result[filename][2+n]
+		else:
+			return "error bad number"
+	else:
+		return "error bad filename"
+	data1=[]
+	data2=[]
+	data3=[]
+	match=-1
+	if player in m.DBs["all"].players:
+		n=len(m.DBs["all"].players[player])
+		for g2 in m.DBs["all"].players[player]:
+			print("azeaz",gprout)
+			(dh,dg,da)=getAllScore(gprout,g2)
+			data1.append(dh)
+			data2.append(dg)
+			data3.append(da)
+			mini=100
+		for i in range(len(data1)):
+			if(data1[i]+data2[i]<mini):
+				mini=data1[i]+data2[i]
+				match=i
+	return render_template("testviz.html",n=n,data1=data1,data2=data2,data3=data3,match=match)
+
 
     
 if __name__ == "__main__":
-	app.run(debug=True)  
+	app.run(debug=True,host='0.0.0.0')  
 #	app.run(debug=True,host='0.0.0.0')  
 
 

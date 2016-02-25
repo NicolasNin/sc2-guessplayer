@@ -53,7 +53,7 @@ class corelation():
 	def visualizeCorelation(self,db1,liste1,db2,liste2,coefMat=1,coefGap=4,coefApm=0,coefFreq=0,groupbyname=True):
 		(mat,listeg1,listeg2)=self.corelation(db1,liste1,db2,liste2,coefMat=coefMat,coefGap=coefGap,coefApm=coefApm,coefFreq=coefFreq)
 		self.VisualizeMatrix(mat,listeg1,listeg2,True,groupbyname=groupbyname)
-	def VisualizeMatrix(self,matrix,listegames1,listegames2,display=False,groupbyname=True,path="img/corelation"):			
+	def VisualizeMatrix(self,matrix,listegames1,listegames2,display=False,groupbyname=True,path="img/corelation",name="auto.png"):			
 		alpha=[];beta=[]
 		prevname=""
 		sizex=[]
@@ -117,7 +117,6 @@ class corelation():
 		if display==True:
 			plt.show()
 		print("before save",os.getcwd())
-		name="corelation"+str(time.clock())+".png"
 		fig.savefig(path+name)
 		return name		
 

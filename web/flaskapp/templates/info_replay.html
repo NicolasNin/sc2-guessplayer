@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,9 +5,9 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
-	<link href="../static/uplodbtn.css" rel="stylesheet">		
+	<link href="../../../static/uplodbtn.css" rel="stylesheet">		
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="../static/upload.js"	></script>	
+	<script src="../../../static/upload.js"	></script>	
 
   </head>
   <body>
@@ -62,46 +61,42 @@
 		</div>		
 	</div>			
 	
-	<div class="row">	
-		<div class="col-lg-8">	
-			<p>Liste of replay for {{name}}</p>
-			<table class="table table-striped">
-				<thead>
-				      <tr>
-				        <th>N°</th>
-				        <th>Who vs Who</th>
-				        <th>Date Played</th>
-				        <th>Event</th>
-				      </tr>
-				</thead>
-				<tbody>
-					{% for n in number %}
-			      <tr>
-					  <td>{{n}}</td>
-			        <td><a href="../replays/{{name}}/all/{{n}}">{{player1[n]}} ({{race1[n]}}) VS {{player2[n]}} ({{race2[n]}}) </a></td>
-			        <td>{{date[n]}}</td>
-			        <td>{{event[n]}}</td>
-			      </tr>
-			    </tbody>
-				{% endfor %}
-			</table>
-		</div>
-		
-	</div>
-<br><br>
+<!--            on affiche les infos du replay-->
+<!-- on a besoin de p1,p2,race1,race2, date,event,path -->	
+<div class="row">
+	<div class="col-lg-6">
+	<table class="table ">
 
-	<div class="row top-buffer">		
-			<div class="col-lg-8">	
-				<h3>Autocorelation chart</h3>
-			<p>The autocorelation chart of {{name}} in those replays, the cooler the color, the closer the replay</hp>
-				<img src="{{img_corel}}" alt="Smiley face" >
-			</div>
-		
-	</div>		
-			
-				    
-		</div>
-   
+  <tbody>
+    <tr>
+      <th scope="row">Player 1</th>
+      <td>{{p1}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Player 2</th>
+      <td>{{p2}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Map</th>
+      <td>{{map}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Date Played</th>
+      <td>{{date}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Event</th>
+      <td>{{event}}</td>
+    </tr>
+    <tr>
+      <th scope="row">file in database</th>
+      <td>{{path}}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
   </body>
