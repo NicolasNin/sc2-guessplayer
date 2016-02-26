@@ -69,7 +69,7 @@
 			<p>All the players in the database</p>
 		      <ul>
 		        {% for n in liste %}
-		        <li><a href="/player/{{n[0]}}">{{n[0]}}</a> with {{n[1]}} replays</li>
+		        <li><a href="/player/{{n[0]}}">{{n[0]}}</a> with {{n[1]}} replays <a href="/matrix2/{{n[0]}}/2">matrix</a> <a href="/graphe/{{n[0]}}/2">graph</a> </li>
 		        {% endfor %}
 		      </ul>
 

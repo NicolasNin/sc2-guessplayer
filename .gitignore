@@ -1,5 +1,13 @@
-
-
+web/flaskapp/templates/testajax.html
+web/file to test/
+stats/
+Replays/
+replayofficial/
+img/
+save/
+web/flaskapp/app2.py
+web/flaskapp/replayuploaded/
+web/flaskapp/static/img/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

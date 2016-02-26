@@ -1,5 +1,5 @@
 import sys,os
-from flask import Flask, render_template, request,redirect, url_for
+from flask import Flask, render_template, request,redirect, url_for,jsonify
 from werkzeug import secure_filename
 import pickle
 sys.path.insert(0, '../../src')
@@ -29,11 +29,90 @@ dict_of_result={}
 def allowed_file(filename):
     return '.' in filename and \
 			filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+EVENT=["WCS15S1","WCS15S2","WCS15S3","NW3","HS12","DH"]
+EventUrl=["http://wiki.teamliquid.net/starcraft2/2015_WCS_Season_1/",
+"http://wiki.teamliquid.net/starcraft2/2015_WCS_Season_2",
+"http://wiki.teamliquid.net/starcraft2/2015_WCS_Season_3",
+"http://wiki.teamliquid.net/starcraft2/NationWars_III",
+"http://wiki.teamliquid.net/starcraft2/HomeStory_Cup/12",
+"http://wiki.teamliquid.net/starcraft2/2016_DreamHack_Open/Leipzig"]
+liste_player=[]
+for i in m.DBs["all"].players:
+	liste_player.append(i)
+def event(path):
+	if path[18:30]=="WCS15Season1":
+		return 0
+	if path[18:30]=="WCS15Season2":
+		return 1
+	if path[18:30]=="WCS15Season3":
+		return 2
+	if path[18:21]=="NW3":
+		return 3
+	if path[18:22]=="HS12":
+		return 4
+	if path[18:20]=="dh":
+		return 5
+
+@app.route('/comparegroupsgraphe')
+def comparegroup2():
+	return render_template("graphemany.html",liste=liste_player)
+
+@app.route('/comparegroups')
+def comparegroup():
+	return render_template("matrixmany.html",liste=liste_player)
+@app.route('/matrix2/<player>/<t>')
+def matrix(player,t):
+	player=getDBname(player)
+	return render_template("graphe.html",player=player,t=t)
+	
+@app.route('/graphe/<player>/<t>')
+def graphe(player,t):
+	player=getDBname(player)
+	
+	return render_template("matrix.html",player=player,t=t)
 
 
-@app.route('/showSignUp')
-def showSignUp():
-    return render_template('signup.html')
+@app.route('/matrix/<player>/<t>',methods=['POST','GET'])
+def corelPlayer(player,t):
+	flag=True
+	l=[]
+	a={"nodes":[],"links":[]}
+	if request.method == 'POST':
+		flag=False
+		t=0.5
+		name= request.get_json(force=True)
+		print(name)
+		if(float(name["t"])>0):
+			t=float(name["t"])
+		if len(name)!=0:
+			
+			for p in name["players"]:
+				print(p)
+				p=getDBname(p)
+				if p in m.DBs["all"].players:
+					for g in  m.DBs["all"].players[p]:
+						l.append(g)
+		else:
+			return "error"
+	else: 
+		t=float(t)
+		player=getDBname(player)
+		if player in m.DBs["all"].players:
+			l=m.DBs["all"].players[player]
+	for (i,g1) in enumerate(l):
+		e=event(g1.path)
+		if flag:
+			a["nodes"].append({"name":str(EVENT[e])+" "+g1.player2,"group":e})
+		else:
+			a["nodes"].append({"name":g1.player1,"group":g1.player1})
+	for (i,g1) in enumerate(l):
+		
+		for (j,g2) in enumerate(l):
+			(dh,dg,da)=getAllScore(g1,g2)
+			if dh<t:		
+				a["links"].append({"source":i,"target":j,"value":(dh)})
+	return jsonify(a)
+	return "error"
 
 @app.route("/echo", methods=['POST'])
 def echo(): 
@@ -186,6 +265,7 @@ def player(playername):
 	list_of_race2=[]
 	list_of_dates=[]
 	list_of_event=[]
+	list_of_eventurl=[]
 	
 	
 	#create auto corelation png
@@ -207,10 +287,8 @@ def player(playername):
 		list_of_player2.append(i.player2)
 		list_of_race2.append(i.race2)
 		list_of_dates.append(i.date)
-		if(i.path[18:18+3]=="WCS"):	
-			list_of_event.append(i.path[18:18+16])
-		else:
-			list_of_event.append(i.path[18:18+3])
+		list_of_event.append(EVENT[event(i.path)])
+		list_of_eventurl.append(EventUrl[event(i.path)])
 		list_of_path_of_games.append(i.path[18:-12])
 		
 
@@ -223,6 +301,7 @@ def player(playername):
 	race1=list_of_race2,
 	race2=list_of_race2,
 	event=list_of_event,
+	eventurl=list_of_eventurl,
 	date=list_of_dates
 	)
 @app.route('/replays/<player>/<db>/<number>'	)
@@ -239,7 +318,9 @@ def replayinfo(player,db,number):
 				p2=g.player2,
 				race1=g.race1,
 				race2=g.race2,
-				path=g.path
+				path=g.path,
+				eventurl=EventUrl[event(g.path)],
+				event=event(g.path)
 				)
 	return "404 biatch"
 @app.route('/')	
@@ -264,7 +345,7 @@ def compare(filename,n,player):
 	if player in m.DBs["all"].players:
 		n=len(m.DBs["all"].players[player])
 		for g2 in m.DBs["all"].players[player]:
-			print("azeaz",gprout)
+			
 			(dh,dg,da)=getAllScore(gprout,g2)
 			data1.append(dh)
 			data2.append(dg)
