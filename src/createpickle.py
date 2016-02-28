@@ -16,8 +16,8 @@ def main():
 	"""
 	#TODODODOODODODODOODO: ajouter une db a une autre
 	m.addDb("all","replayofficial/NOPE")
-	m.DBs["all"].addDirectory("../replayofficial/WCS14Season2")
-	m.DBs["all"].addDirectory("../replayofficial/WCS14GBSeason 3")
+#	m.DBs["all"].addDirectory("../replayofficial/WCS14Season2")
+#	m.DBs["all"].addDirectory("../replayofficial/WCS14GBSeason 3")
 	m.DBs["all"].addDirectory("../replayofficial/WCS15Season1")
 	m.DBs["all"].addDirectory("../replayofficial/WCS15Season2")
 	m.DBs["all"].addDirectory("../replayofficial/WCS15Season3")

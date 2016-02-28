@@ -37,7 +37,7 @@ class game():
 		self.length=length
 	def calculateAllFeatures(self,limit=10000,limitlow=0,limit_apm=10000):
 		self.calculate_matrix(limit,limitlow)
-		self.calculate_matrix3(limit,limitlow)
+		#self.calculate_matrix3(limit,limitlow)
 		self.calculate_frequency(limit,limitlow)
 		self.calculateFrequencyGap()
 		self.normalize_matrix()

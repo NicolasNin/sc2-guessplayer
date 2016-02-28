@@ -40,7 +40,7 @@ alias=[['forgg','m\xc7\x82forgg','millforgg',"millsymbolforgg","mforgg"],
 ["parting","fwparting"],
 ["nice","fwnice"],
 ["kas","empirekas","fearless"],
-["stephano","mdstephano"],
+["stephano","mdstephano"], #barcode from NW3 and HS12
 ["rogue","savage"],
 ["mma","acermma"],
 ["mvp","immvp"],
@@ -48,11 +48,22 @@ alias=[['forgg','m\xc7\x82forgg','millforgg',"millsymbolforgg","mforgg"],
 ["alicia","axalicia"],
 ["slivko","steelmaker","vpbenqslivko:"],
 ["courage","zoocourage"],
-["oz","pkdoz"]
+["oz","pkdoz"],
+["zhugeliang","wallfacer"]
 ]
 
+barcode={
+"IIIIIIIIIIII":["State","GosuDark"],
+"IlIlIlIlIlIl":["BoomBox"] ,
+"IlIlllIIl":["Stephano"] ,
+"lIIlllllIIII":["Huk"],
+"lIlIlIlIlIlI":["SortOf"],
+"llllllllllll":["Lilbow","iaguz"]
+}
 
 def get(name):
+	if name in barcode:
+		name=barcode[name][0]
 	if name.lower()=="hero" or name.lower()=="liquidhero":
 		if name[0]=="H" or name[0].lower()=="l":
 			return 'HerO(Liquid)'

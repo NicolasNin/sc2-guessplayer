@@ -29,8 +29,8 @@ dict_of_result={}
 def allowed_file(filename):
     return '.' in filename and \
 			filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-EVENT=["WCS15S1","WCS15S2","WCS15S3","NW3","HS12","DH"]
-EventUrl=["http://wiki.teamliquid.net/starcraft2/2015_WCS_Season_1/",
+EVENT=["Unknwown","WCS15S1","WCS15S2","WCS15S3","NW3","HS12","DH"]
+EventUrl=["","http://wiki.teamliquid.net/starcraft2/2015_WCS_Season_1/",
 "http://wiki.teamliquid.net/starcraft2/2015_WCS_Season_2",
 "http://wiki.teamliquid.net/starcraft2/2015_WCS_Season_3",
 "http://wiki.teamliquid.net/starcraft2/NationWars_III",
@@ -41,17 +41,19 @@ for i in m.DBs["all"].players:
 	liste_player.append(i)
 def event(path):
 	if path[18:30]=="WCS15Season1":
-		return 0
-	if path[18:30]=="WCS15Season2":
 		return 1
-	if path[18:30]=="WCS15Season3":
+	if path[18:30]=="WCS15Season2":
 		return 2
-	if path[18:21]=="NW3":
+	if path[18:30]=="WCS15Season3":
 		return 3
-	if path[18:22]=="HS12":
+	if path[18:21]=="NW3":
 		return 4
-	if path[18:20]=="dh":
+	if path[18:22]=="HS12":
 		return 5
+	if path[18:20]=="dh":
+		return 6
+	else:
+		return 0
 
 @app.route('/comparegroupsgraphe')
 def comparegroup2():
@@ -298,7 +300,7 @@ def player(playername):
 	number=list_of_number,
 	player1=list_of_player1,
 	player2=list_of_player2,
-	race1=list_of_race2,
+	race1=list_of_race1,
 	race2=list_of_race2,
 	event=list_of_event,
 	eventurl=list_of_eventurl,
@@ -320,7 +322,9 @@ def replayinfo(player,db,number):
 				race2=g.race2,
 				path=g.path,
 				eventurl=EventUrl[event(g.path)],
-				event=event(g.path)
+				event=EVENT[event(g.path)],
+				name_in_replay1=g.name_in_replay1,
+				name_in_replay2=g.name_in_replay2
 				)
 	return "404 biatch"
 @app.route('/')	
