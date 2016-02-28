@@ -166,11 +166,7 @@ class dbsc2():
 			
 			g=game.game(name1,name2,race1,race2,hotkeys,frames,path=filename)
 			g.calculateAllFeatures(self.limit_matrix,0,self.limit_apm)
-			#g.calculate_matrix(self.limit_matrix)
-			#g.calculate_frequency(self.limit_matrix)
-			#g.calculateFrequencyGap()
-			#g.normalize_matrix()
-			#g.calculateAPMj1(self.limit_apm)
+
 			
 			if g.player1 not in self.players:
 				self.players[g.player1]=[]

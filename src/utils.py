@@ -1,4 +1,5 @@
 #sc2-guessplayer
+import math
 def minnotnul(l):
 	mini=-1
 	for i in l:
@@ -30,18 +31,22 @@ def distancedict(d1,d2,maxvalue):
 		som+=abs(d1.get(i,0)-d2.get(i,0))
 	return som	
 
-def distancearray(arr1,arr2):
+def distancearray(arr1,arr2,maxbreak=100):
 	som=0
 	for i in range(len(arr1)):
 		som+=abs(arr1[i]-arr2[i])
+		if som>=maxbreak:
+			return som
 	return som		
-def manhattan(matrix1,matrix2):
+def manhattan(matrix1,matrix2,maxbreak=10,puissance=1):
 	#both matrix must have the same dimension
 	som=0
 	for line in range(10):
 		for col in range(10):
-				som+=abs(matrix1[line][col]-matrix2[line][col])
-	return som
+			if som>=maxbreak:
+				return som
+			som+=math.pow(abs(matrix1[line][col]-matrix2[line][col]),puissance)
+	return math.pow(som,1/puissance)
 
 def getPosition(name,liste):
 	for i in range(len(liste)):

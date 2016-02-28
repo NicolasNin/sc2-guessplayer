@@ -22,6 +22,7 @@ class game():
 		self.last_frame=frame[len(frame)-1]
 		#stuff to be calculated THOSE ARE THE FEATURE DEPENDING ON ESTIMATOR
 		self.matrix=[]
+		self.matrix3=[]
 		self.APM=-1
 		self.frequency_of_hotkeys=[0,0,0,0,0,0,0,0,0,0]
 		self.frequency_of_gap={}
@@ -36,6 +37,7 @@ class game():
 		self.length=length
 	def calculateAllFeatures(self,limit=10000,limitlow=0,limit_apm=10000):
 		self.calculate_matrix(limit,limitlow)
+		self.calculate_matrix3(limit,limitlow)
 		self.calculate_frequency(limit,limitlow)
 		self.calculateFrequencyGap()
 		self.normalize_matrix()
@@ -65,7 +67,27 @@ class game():
 		s=sum(self.frequency_of_hotkeys)
 		for i in range(len(self.frequency_of_hotkeys)):
 			self.frequency_of_hotkeys[i]=float(self.frequency_of_hotkeys[i])/s
-				
+	def calculate_matrix3(self,limit=10000,limitlow=0):
+		self.matrix3=[0]*1000
+		last=min(limit,self.last_frame)
+		prev=-1
+		prev2=-1
+		for i in range(len(self.hotkeys)):
+			touche=self.hotkeys[i]
+			if self.frame[i]> limitlow or self.frame[i]< last:
+				if prev!=-1 and prev2!=-1:
+					a=prev2+10*prev+touche*100
+					self.matrix3[a]+=1
+				prev2=prev
+				prev=touche
+			else:
+				break
+		s=sum(self.matrix3)	
+		if s!=0:	
+			for i in range(1000):
+				self.matrix3[i]=float(self.matrix3[i])/s		
+		else:
+			print("matrix3 empty")			
 	def calculate_matrix(self,limit=10000,limitelow=0):
 		self.matrix_calculated_with_limits=limit
 		#initalize 10X10 matrix kinda dirty

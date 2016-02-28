@@ -27,29 +27,34 @@ alias=[['forgg','m\xc7\x82forgg','millforgg',"millsymbolforgg","mforgg"],
 ["mystery","jieshi"],
 ["blaze","panic"],
 ["bly","acerbly"],
-["hear","axheart"],
+["heart","axheart"],
 ["scarlett","shura"],
 ["jim","igjimprime"],
 ["neeb","neeblet"],
 ["qxc","colqxc"],
 ["demuslim","egdemuslim"],
-["demuslim","egdemuslim"],
 ["nerchio","acernerchio"],
-["puck","mellow"],
+["puck","mellow","shloopy"],
 ["major","light","windy","altaria","shofu"],
 ["scarlett","shura"],
 ["parting","fwparting"],
 ["nice","fwnice"],
 ["kas","empirekas","fearless"],
-["stephano","mdstephano",],
-
-
+["stephano","mdstephano"],
+["rogue","savage"],
+["mma","acermma"],
+["mvp","immvp"],
+["nestea","imnestea"],
+["alicia","axalicia"],
+["slivko","steelmaker","vpbenqslivko:"],
+["courage","zoocourage"],
+["oz","pkdoz"]
 ]
 
 
 def get(name):
-	if name.lower()=="hero":
-		if name[0]=="H":
+	if name.lower()=="hero" or name.lower()=="liquidhero":
+		if name[0]=="H" or name[0].lower()=="l":
 			return 'HerO(Liquid)'
 		else:
 			return "hero(CJ)"

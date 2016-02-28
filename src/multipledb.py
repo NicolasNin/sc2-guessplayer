@@ -27,7 +27,7 @@ class multipleDB():
 			self.DBs[db].calculateMeanAPM()
 	##method to evaluate db against other db using estimator or scikit
 	
-	def evaluateDB(self,db1,dbtest,method="manhattan",option=2,fail=False,maxGap=15,coefMat=1,coefGap=1,coefApm=1,coefFreq=1):
+	def evaluateDB(self,db1,dbtest,method="manhattan",option=2,fail=False,maxGap=15,coefMat=1,coefGap=1,coefApm=1,coefFreq=1,coefMat3=0):
 		if type(db1)==str:
 			db1=self.DBs[db1]
 		if type(dbtest)==str:
@@ -45,7 +45,7 @@ class multipleDB():
 				s+=1
 				#print ("player {0} is being predicted, number {1}".format(player,s))
 				for game in dbtest.players[player]:
-					result.append(self.estimator.predictByPlayer(game,method,option,maxGap,coefMat,coefGap,coefApm,coefFreq))
+					result.append(self.estimator.predictByPlayer(game,method,option,maxGap,coefMat,coefGap,coefApm,coefFreq,coefMat3))
 					target.append(game.player1)
 		return (result,target)
 		
@@ -57,7 +57,7 @@ class multipleDB():
 			if result[i]==target[i]:
 					s+=1
 		return float(s)/len(result)	
-	def evaluateProba(self,db1,dbtest,method="manhattan",option=2,fail=False,maxGap=15,coefMat=1,coefGap=1,coefApm=1,coefFreq=1):
+	def evaluateProba(self,db1,dbtest,method="manhattan",option=2,fail=False,maxGap=15,coefMat=1,coefGap=1,coefApm=1,coefFreq=1,coefMat3=0,puissance=1):
 		#same as evaluate but now we return the dict of proba by using giveProba which is not a proba but the score min score for each player
 		if type(db1)==str:
 			db1=self.DBs[db1]
@@ -77,14 +77,14 @@ class multipleDB():
 				print (("player {0} is being given probas, number {1}"+str2).format(player,s))
 				
 				for game in dbtest.players[player]:
-					result.append(self.estimator.giveProba(game,method,option,maxGap,coefMat,coefGap,coefApm,coefFreq))
+					result.append(self.estimator.giveProba(game,method,option,maxGap,coefMat,coefGap,coefApm,coefFreq,coefMat3,puissance))
 					target.append(game)
 					
 		db1.calculateAC()			
 		db1.calculateStatsAc(method="mean")			
 		self.scoreProba(result,target,dbtest=db1)			
 		return (result,target)
-	def scoreProba(self,resproba,target,threshold=200,dbtest=None,treshProba=-1):
+	def scoreProba(self,resproba,target,threshold=200,dbtest=None,treshProba=-100000):
 		#resproba is a list of sorted ordered dict with name as key and (value,game) as value
 		fail=0
 		bad_failure=0
@@ -161,55 +161,7 @@ class multipleDB():
 			
 			
 			#################			
-		"""
-			if (a==threshold):
-				
-				print(("{7}:{0}:1:{1} with {2} |posof {0}: {3} with value {4}|p0:{8} p1({9}):{10}, p2({11}): {12} pa:{13}:"+str1).
-				format(target[i].player1,
-				resproba[i][0][0],
-				round(resproba[i][0][1],2),a,
-				round(resproba[i][a][1],2),round(target[i].APM,3),round(resproba[i][0][2].APM,3),i,
-				round(proba0,2),#8
-				resproba[i][1][0],
-				round(proba1,2),
-				resproba[i][2][0],
-				round(proba2,2),
-				round(probaa,2)
-				))
-				st+=1
-				sumt+=resproba[i][0][1]
-				if (st!=0):			
-					print("number of case: {1} with mean value {2}".format(threshold,st,round(sumt/st,2)))
-					
-			if (a>0 and threshold==200):
-				if(proba0< proba1 or proba0<proba2):
-						probafalsenegative+=1
-						str1=("WARNING!!")
-				print(("{7}:{0}: Guess1 {1} with value {2} |position of {0}: {3} with value {4}|apm of {0}:{5} apm of {1}: {6}"+str1).
-				format(target[i].player1,
-				resproba[i][0][0],
-				round(resproba[i][0][1],2),a,
-				round(resproba[i][a][1],2),round(target[i].APM,3),round(resproba[i][0][2].APM,3),i))
-				s+=1
-				if(a>2):
-					bad_failure+=1
-				if(resproba[i][0][1]>1):
-					bad_replay+=1
-		if (st!=0):			
-			print("number of position {0}: {1} with mean value {2}".format(threshold,st,round(sumt/st,2)))
-		print("Number of games: {0},number of failure {1}({2})% , number of bad failure(>2) {3}({5}%) ,failure not bad {8}, bad replay {4}({6}%) bad failure less bad replay {7}({9}%)|{10} ".format(
-		len(target),						
-		s,									
-		round(float(s)/len(target)*100,3),	
-		bad_failure,
-		bad_replay,
-		round(float(bad_failure)/len(target)*100,2)
-		,round(float(bad_replay)/len(target)*100,2)
-		,bad_failure-bad_replay		#7
-		,s-bad_failure,
-		round(float(s-bad_failure)/len(target),2),
-		probafalsenegative))
-		"""
+
 	def scoreProbaByPLayer(self,resproba,target):
 		dtotal={}
 		d0={}
@@ -232,17 +184,17 @@ def main():
 #test path need to have bad p1 or p2 files	
 def test():
 	 #test rapide 
-	testpath="replaytest/2"
-	testpath2="replaytest/1"
+	testpath="../Replays/replaytest/2"
+	testpath2="../Replays/replaytest/1"
 	
 	#test long
 #	testpath="replayofficial/WCS15Season2"
 #	testpath2="replayofficial/WCS15Season3"
 	m=multipleDB()
 	print ("test :addindg two dbs from ")
-	m.addDb("2",testpath)
-	m.addDb("3",testpath2)
-	db1=m.DBs["2"]
+	m.addDb("test2",testpath)
+	m.addDb("test3",testpath2)
+	db1=m.DBs["test2"]
 #	db1.calculateAC()
 #	db1.calculateStatsAc()
 #	print(db1.statsAC["maru"],db1.getProbaPlayer(0.86,"maru"))
@@ -258,8 +210,8 @@ def test():
 	print("test:evaluate Proba")
 	#res,target=m.evaluateDB("1","2","gap",coefMat=1,coefGap=1,coefApm=0,coefFreq=0)
 	#print(m.scoreEval(res,target))
-	res,target=m.evaluateProba("2","3","gap",fail=True,coefMat=1,coefGap=1,coefApm=0,coefFreq=0)
-	#m.scoreProba(res,target,-1)
+	res,target=m.evaluateProba("test2","test3","gap",fail=True,coefMat=1,coefGap=0,coefApm=0,coefFreq=0,coefMat3=0)
+	m.scoreProba(res,target,200,m.DBs["test2"],-100000)
 	print("END TEST")
 	#print(m.scoreEval(res,tar))
 if __name__ == '__main__':
