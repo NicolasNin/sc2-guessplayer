@@ -2,28 +2,23 @@ import sys,os
 from flask import Flask, render_template, request,redirect, url_for,jsonify
 from werkzeug import secure_filename
 import pickle
-sys.path.insert(0, '../../src')
+path_abs=os.path.abspath(".")+"/"
+
+
+if path_abs=="/home/sc2guess/":
+		path_abs="/home/sc2guess/sc2-guessplayer/web/flaskapp/"
+sys.path.insert(0, path_abs+'/../../src')
 import corelation
 import estimator
 
+
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = "replayuploaded"
+app.config['UPLOAD_FOLDER'] = path_abs+"replayuploaded"
 ALLOWED_EXTENSIONS = set(["sc2replay"])
 
-m=pickle.load(open("../../save/dbserver","rb"))
-
-"""
-sys.path.insert(0, '/home/sc2guess/sc2-guessplayer/src')
+m=pickle.load(open(path_abs+"../../save/dbserver","rb"))
 
 
-
-
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = "/home/sc2guess/sc2-guessplayer/web/flaskapp/replayuploaded"
-ALLOWED_EXTENSIONS = set(["SC2Replay"])
-
-m=pickle.load(open("/home/sc2guess/sc2-guessplayer/save/dbserver","rb"))
-"""
 
 dict_of_result={}
 def allowed_file(filename):
@@ -71,7 +66,7 @@ def matrix(player,t):
 def graphe(player,t):
 	player=getDBname(player)
 	
-	return render_template("matrix.html",player=player,t=t)
+	return render_template("visu_graphe.html",player=player,t=t)
 
 
 @app.route('/matrix/<player>/<t>',methods=['POST','GET'])
@@ -202,7 +197,7 @@ def analyse():
 		
 		
 		
-	return render_template('newretour2.html',
+	return render_template('analyze.html',
 			nameinreplay1=g1.name_in_replay1,
 			nameinreplay2=g2.name_in_replay1,
 			race1=g1.race1,
@@ -269,15 +264,15 @@ def player(playername):
 	list_of_event=[]
 	list_of_eventurl=[]
 	
-	
 	#create auto corelation png
-	path="static/img/corelation/"
+
 	imagename="auto"+playername+".png"
-	if not os.path.exists(path+imagename):
+	
+	if not os.path.exists(path_abs+"static/img/corelation/"+imagename):
 		c=corelation.corelation()
 		db1=m.DBs["all"]
 		(mat,listeg1,listeg2)=c.corelation(db1,playername2,db1,playername2,coefMat=1,coefGap=0,coefApm=0,coefFreq=0)
-		imagename=c.VisualizeMatrix(mat,listeg1,listeg2,display=False,groupbyname=False,path=path,name="auto"+playername+".png")
+		imagename=c.VisualizeMatrix(mat,listeg1,listeg2,display=False,groupbyname=False,path=path_abs+"static/img/corelation/",name="auto"+playername+".png")
 		print (imagename)
 	num=-1	
 	for i in m.DBs["all"].players[getDBname(playername)]:
@@ -294,7 +289,6 @@ def player(playername):
 		list_of_path_of_games.append(i.path[18:-12])
 		
 
-	print("ici",os.getcwd())
 	path="img/corelation/"
 	return render_template("player.html",name=playername,liste_path_games=list_of_path_of_games,img_corel=path+imagename,
 	number=list_of_number,
@@ -329,7 +323,7 @@ def replayinfo(player,db,number):
 	return "404 biatch"
 @app.route('/')	
 def main():
-	return render_template('id.html')
+	return render_template('index.html')
 @app.route("/compare/<filename>/<n>/<player>")
 def compare(filename,n,player):
 	#we need to compute one replay against all of a player

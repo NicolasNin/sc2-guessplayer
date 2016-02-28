@@ -8,12 +8,12 @@
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="{{url_for('static', filename='uplodbtn.css')}}" rel="stylesheet"" rel="stylesheet">		
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="{{url_for('static', filename='upload.js')}}""	></script>	
+	<script src="{{url_for('static', filename='upload.js')}}"	></script>	
 
   </head>
   <body>
 	   
-		<div class="container">
+	<div class="container">
 				
 				  <!-- Modal -->
 			  <div class="modal fade" id="myModal" role="dialog">
@@ -41,10 +41,10 @@
 				<nav class="navbar navbar-default">
 				  <div class="container-fluid">
 				    <div class="navbar-header">
-				      <a class="navbar-brand" href="#">Sc2Guess</a>
+				      <a class="navbar-brand" href="/">Sc2Guess</a>
 				    </div>
 				    <ul class="nav navbar-nav">
-				      <li class="active"><a href="#">Home</a></li>
+				      <li class="active"><a href="/">Home</a></li>
 				      <li><a href="/liste_of_player">Players</a></li>
 				
 				    </ul>
@@ -62,63 +62,11 @@
 		</div>		
 	</div>			
 			
-				
-			<!-- ohter try--	
-			<div class="row">
-                <div class="col-lg-8">
-                   	<div class="page-header">
-			            <nav>
-			                <ul class="nav nav-pills pull-right">
-			                    <li role="presentation" class="active"><a href="/">Home</a>
-			                    </li>
-			                    
-			                </ul>
-			            </nav>
-			            <h3 class="text-muted">SC2 Guesser</h3>
-					</div>
-                </div>
-            </div>
-            -->	
-			<div class="row">
-                <div class="col-lg-8">
-					<h3> What is SC2guess ?</h3>
-					<p> Sc2guess is a project which aims at finding the players in a starcraft 2 replay. It uses databases of replays such as 
-					the WCS where the names in the replay are usually correct.
-					</p>
-					<h3> How does it works ?</h3>
-					<p> It assumes that a player (at least a good player), have regular patterns in keyboard use. In particular it looks at the hotkeys
-					a player uses and compares it to the one in the database </p>
-                    
-                </div>
-            </div>
-			
+			{% block content %}{% endblock %}	
 		
-			<div class="row">
-				
-                <div class="col-lg-8">
-					<div class="boxes">
-						<div class="centertext"><h2>Upload a replay and try it now</h2></div>
-						<form id="my_form" method="post" action="/upload" enctype="multipart/form-data">
-						<center><span class="btn btn-primary btn-lg btn-file">
-						    Upload <input type="file" name="sc2replay" id="test2">
-						</span></center>
-						
-						</form>
-						
-                    </div>
-                </div>
-            </div>
-			<p></p>
-			<p></p>	
-			<div class="row">	
-				 <div class="col-lg-8">
-					<p> Get the <a href="liste_of_player" action= "/liste_of_player"> list</a> of player in the database</p>
-				</div>	
-			</div>
-	
 
 				    
-		</div>
+	</div><!-- end container-->
    
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
