@@ -60,13 +60,13 @@ def comparegroup():
 @app.route('/matrix2/<player>/<t>')
 def matrix(player,t):
 	player=getDBname(player)
-	return render_template("graphe.html",player=player,t=t)
+	return render_template("matrix_visu.html",player=player,t=t)
 	
 @app.route('/graphe/<player>/<t>')
 def graphe(player,t):
 	player=getDBname(player)
 	
-	return render_template("visu_graphe.html",player=player,t=t)
+	return render_template("temgraph.html",player=player,t=t)
 
 
 @app.route('/matrix/<player>/<t>',methods=['POST','GET'])
@@ -99,15 +99,16 @@ def corelPlayer(player,t):
 	for (i,g1) in enumerate(l):
 		e=event(g1.path)
 		if flag:
-			a["nodes"].append({"name":str(EVENT[e])+" "+g1.player2,"group":e})
+			a["nodes"].append({"name":g1.player2+"("+g1.race2+")","group":e,"event":str(EVENT[e])})
 		else:
-			a["nodes"].append({"name":g1.player1,"group":g1.player1})
+			print("hererer")
+			a["nodes"].append({"name":g1.player1,"group":g1.player1,"event":str(EVENT[e])})
 	for (i,g1) in enumerate(l):
 		
 		for (j,g2) in enumerate(l):
 			(dh,dg,da)=getAllScore(g1,g2)
 			if dh<t:		
-				a["links"].append({"source":i,"target":j,"value":(dh)})
+				a["links"].append({"source":i,"target":j,"value":2-dh})
 	return jsonify(a)
 	return "error"
 
@@ -353,7 +354,7 @@ def compare(filename,n,player):
 			if(data1[i]+data2[i]<mini):
 				mini=data1[i]+data2[i]
 				match=i
-	return render_template("testviz.html",n=n,data1=data1,data2=data2,data3=data3,match=match)
+	return render_template("testviz.html",n=n,data1=data1,data2=data2,data3=data3,match=match,name=player)
 
 
     

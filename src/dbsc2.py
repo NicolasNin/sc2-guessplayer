@@ -139,7 +139,17 @@ class dbsc2():
 				g1.calculateAllFeatures(self.limit_matrix,0,self.limit_apm)
 				if g1.player1 not in self.players:
 					self.players[g1.player1]=[]
-				self.players[g1.player1].append(g1)
+					self.players[g1.player1].append(g1)
+				else:
+					#we have to check if the race is the same:
+					if 	self.players[g1.player1][0].race1==g1.race1:
+						self.players[g1.player1].append(g1)
+					else:
+						g1.player1=g.player1+g1.race1[0].lower()
+						if g1.player1 not in self.players:
+							self.players[ g1.player1]=[]
+						self.players[g1.player1].append(g1)	
+						
 			if g2!="error":
 				g2.calculateAllFeatures(self.limit_matrix,0,self.limit_apm)
 				if g2.player1 not in self.players:
@@ -166,11 +176,24 @@ class dbsc2():
 			
 			g=game.game(name1,name2,race1,race2,hotkeys,frames,path=filename)
 			g.calculateAllFeatures(self.limit_matrix,0,self.limit_apm)
-
-			
 			if g.player1 not in self.players:
-				self.players[g.player1]=[]
-			self.players[g.player1].append(g)
+					self.players[g.player1]=[]
+					self.players[g.player1].append(g)
+			else:
+				#we have to check if the race is the same:
+				if 	self.players[g.player1][0].race1==g.race1:
+					self.players[g.player1].append(g)
+				else:
+					g.player1=g.player1+g.race1[0].lower()
+					if g.player1 not in self.players:
+						self.players[ g.player1]=[]
+					self.players[g.player1].append(g)	
+			
+			
+			
+			#if g.player1 not in self.players:
+			#	self.players[g.player1]=[]
+			#self.players[g.player1].append(g)
 		else:
 			print("empty replay",filename)
 		return 	g

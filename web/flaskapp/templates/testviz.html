@@ -2,12 +2,7 @@
 {% block content %}
 <style>
 
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: auto;
-  position: relative;
-  width: 960px;
-}
+
 
 text {
   font: 10px sans-serif;
@@ -28,6 +23,14 @@ form {
 
 </style>
 
+<div class="row">
+	
+	<div class="col-lg-8">
+		Comparaison of {{name}}'s replay against the one uploaded 
+		<div class="barchart"></div>
+	</div>
+
+</div>
 
 <form>
   <label><input type="radio" name="mode" value="grouped"> Grouped</label>
@@ -47,16 +50,16 @@ var n = 3, // number of layers
     yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); }),
     yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
 	
-var margin = {top: 40, right: 10, bottom: 20, left: 10},
+var margin = {top: 40, right: 10, bottom: 20, left: 20},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 var x = d3.scale.ordinal()
     .domain(d3.range(m))
     .rangeRoundBands([0, width], .08);
-
+var maxyvalue=3;
 var y = d3.scale.linear()
-    .domain([0, yStackMax])
+    .domain([0, maxyvalue])
     .range([height, 0]);
 
 
@@ -64,8 +67,6 @@ var color2 = d3.scale.linear()
     .domain([0, n - 1])
     .range(["#3182bd", "#c6dbef"]);
    
-
-
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -77,7 +78,7 @@ var yAxis = d3.svg.axis()
 	.scale(y)
     .orient("left");
     
-var svg = d3.select("body").append("svg")
+var svg = d3.select(".barchart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -96,7 +97,12 @@ var rect = layer.selectAll("rect")
     .attr("y", height)
     .attr("width", x.rangeBand())
     .attr("height", 0)
-    .style("fill",function(d,i,j){if(i=={{match}}){return color2(j)}return color[j]});
+    .style("fill",function(d,i,j){if(i=={{match}}){return color2(j)}return color[j]})
+    .on("mouseover", mouseover);
+
+  function mouseover(p) {
+    console.log(p);	
+  }
 
 rect.transition()
     .delay(function(d, i) { return i * 10; })
@@ -105,7 +111,7 @@ rect.transition()
 
  svg.append("g")
       .attr("class", "y axis")
-      .attr("transform", "translate(20,0)")
+      .attr("transform", "translate(2,0)")
       .call(yAxis);
       
 svg.append("g")
@@ -129,7 +135,7 @@ function change() {
 }
 
 function transitionGrouped() {
-  y.domain([0, yGroupMax]);
+  y.domain([0, maxyvalue]);
 
   rect.transition()
       .duration(500)
@@ -142,7 +148,7 @@ function transitionGrouped() {
 }
 
 function transitionStacked() {
-  y.domain([0, yStackMax]);
+  y.domain([0, maxyvalue]);
 
   rect.transition()
       .duration(500)
