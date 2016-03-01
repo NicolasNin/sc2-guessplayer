@@ -21,6 +21,11 @@ form {
   top: 10px;
 }
 
+.bar {
+	font: 10px sans-serif;
+  fill: steelblue;
+}
+
 </style>
 
 <div class="row">
@@ -90,25 +95,72 @@ var layer = svg.selectAll(".layer")
     .attr("class", "layer")
     .style("fill", function(d, i) {   return color[i]; });
 
+
 var rect = layer.selectAll("rect")
-    .data(function(d) { return d; })
+    .data(function(d) {console.log(d[0]); return d; })
   .enter().append("rect")
     .attr("x", function(d) { return x(d.x); })
     .attr("y", height)
     .attr("width", x.rangeBand())
     .attr("height", 0)
     .style("fill",function(d,i,j){if(i=={{match}}){return color2(j)}return color[j]})
+    .style("opacity",function(d,i,j){if(j==2){return 0.2;}return 1;})
     .on("mouseover", mouseover);
-
-  function mouseover(p) {
-    console.log(p);	
-  }
 
 rect.transition()
     .delay(function(d, i) { return i * 10; })
     .attr("y", function(d) { return y(d.y0 + d.y); })
     .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); });
 
+var text = layer.selectAll("bar")
+    .data(function(d) {return d; })
+    .enter().append("text")
+    .attr("class", "bar")
+    .attr("text-anchor", "middle")
+    .attr("x", function(d) { return x(d.x)+x.rangeBand()/2; })
+    .attr("y", function(d){return y(d.y0 + d.y)-5;})
+    .attr("dy", ".35em")
+    .text(function(d,i,j) { if (j==1) {return Math.round(100*d.y0+d.y*100)/100; } return "";});
+  
+  
+
+  function mouseover(p) {
+    console.log(p);	
+  }
+console.log(color)
+var test=[1,2,3];
+/*
+var bar = d3.select("svg")
+	.append("g")
+    .attr("transform", "translate(30, 50)" )
+    .append("rect")
+    .attr("width", 20)
+    .attr("height", 20);
+*/
+var legend = svg.selectAll(".test")
+    .data(color)
+  .enter().append("g")
+    .attr("transform", "translate(20, -20)" )
+    .append("rect")
+    .attr("y",function(d,i){console.log(d,i);return i*25;})
+    .attr("width", 20)
+    .attr("height", 20)
+	.style("fill",function(d,i,j){return d;})
+	.style("opacity",function(d,i){if(i==2){return 0.2;}return 1;});
+
+var l=["Hotkeys","Gap","APM"];
+var textlegend = svg.selectAll(".tex")
+    .data(color)
+	.enter().append("g")
+    .attr("transform", "translate(20, -20)" )
+    .append("text")
+    .attr("y",function(d,i){console.log(d,i);return i*25+10;})
+    .attr("x","25")
+    .text(function(d,i) { return l[i];});
+    
+
+
+	
  svg.append("g")
       .attr("class", "y axis")
       .attr("transform", "translate(2,0)")
@@ -136,7 +188,6 @@ function change() {
 
 function transitionGrouped() {
   y.domain([0, maxyvalue]);
-
   rect.transition()
       .duration(500)
       .delay(function(d, i) { return i * 10; })
@@ -149,7 +200,7 @@ function transitionGrouped() {
 
 function transitionStacked() {
   y.domain([0, maxyvalue]);
-
+	
   rect.transition()
       .duration(500)
       .delay(function(d, i) { return i * 10; })

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+	<div class="col-lg-8">
+		<h3> What is SC2guess ?</h3>
+		<p> Sc2guess is a project which aims at finding the players in a starcraft 2 replay. It uses databases of replays such as 
+		the WCS where the names in the replay are usually correct.
+		</p>
+		<h3> How does it works ?</h3>
+		<p> It assumes that a player (at least a good player), have regular patterns in keyboard use. In particular it looks at the hotkeys
+		a player uses and compares it to the one in the database </p>
+		<h3> How do I use it ?</h3>
+		<p>
+			<ul>
+			<li>  Upload a replay where you don't know the players or are not sure of who are playing</li>
+			<li>  For the two players in the replay three guesses are given with an "overall proximity score"</li>
+			<li>  The highest the score the better, a score above 90% is very likely</li>
+			<li>  If no score seems good, either the player is not in the database, or the algorithm doesn't detect it</li>
+			</ul>
+		
+		</p>
+		
+		<h3> How reliable is it ?</h3>
+		<p> The percentage given is kind of a bullshit number derived from a distance between the two replays, and doesnt directly represents 
+		the probability of a player being a good one . This number was meant to have few false-positive, which means that an above 90% score is very good.
+		And also that sometimes a 1% response can be good. 
+		<p> For example if we use the wcs 2015 season 2 as a database reference and test the wcs 2015 season 3, we have :
+		<ul>
+			<li>1070 (half)-replays where the player belongs to the two seasons </li>
+			<li> Among those we have 38 failures</li>
+			<li> Among those 38 failures we have 16 where the good guesses is really far (ie not a second or third guess)</li>
+			<li> On this particular example there is a 96% success rate</li>
+		</ul>
+		In general if the two databases are not too far apart in time the success rate  is around 90% or more.
+		</p>
+		<h3> Where are the replays in the database from ?</h3>	
+			The replay are from official tournaments, where players usually use their true name and not barcodes:
+			<ul>
+				<li> The WCS 2015 three seasons.</li>
+				<li> The nation wars 3 (a <a href="/replays/Huk/all/25">few</a> <a href ="replays/Sortof/all/6">barcodes</a> <a href="/replays/Stephano/all/5">there</a>)</li>
+				<li> The home story cup 3</li>
+				<li> The Dreamhack open Leipzig</li>
+			</ul>
+			
+		</p>
+		<h3> What does all those colored bars means ?</h3>
+		<p> The results are given by calculating some features of the players.
+		<ul>
+			<li> The hotkeys score, is a distance between the hotkey use by the two players, a rule of thumb is that 0.3 or less is pretty good</li>
+			<li> The "gap" score is a measure of the speed ot the player (more precisely a frequency of very short time timeframe between hotkey strokes). A 0.4 score is good. </li>
+			<li> Finally the APM is not really useful and not really the APM. It should be corelated to the previous items and is not used to score the players </li>
+			
+		</ul>
+		Among the three the hotkey score is by far the most meaningful. The "gap" score was getting more good results in testings by being able to disinguish between two players
+			with close hotkey scores ( Zanster and Life for exemple). As a rule there is less variation in gap among pros than in hotkeys.
+		</p>
+		
+		<h3> I've tested a player who is in the database and it doesn't match ?</h3>
+		<p> It's possible that the replay you tested and the one from the player in the database are too far apart. It seems that different expansions change somethings.
+			Another possibility is that the player has changed enough of his hotkeys pattern to be effectively another player (see the <a href="/player/Zest">Zest</a> case) (apart from the gap).
+			Finally some player can have some variance in the way they use hotkeys and if they are closed to a few others players, those can match first. 
+		</p>
+	</div>
+</div>
+
+{% endblock content%}  

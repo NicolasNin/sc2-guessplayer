@@ -325,6 +325,13 @@ def replayinfo(player,db,number):
 @app.route('/')	
 def main():
 	return render_template('index.html')
+	
+@app.route('/contacts')	
+def contact():
+	return render_template('contacts.html')
+@app.route('/FAQ')	
+def faq():
+	return render_template('FAQ.html')
 @app.route("/compare/<filename>/<n>/<player>")
 def compare(filename,n,player):
 	#we need to compute one replay against all of a player

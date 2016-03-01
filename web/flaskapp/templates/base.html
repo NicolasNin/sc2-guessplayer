@@ -65,16 +65,30 @@
 			{% block content %}{% endblock %}	
 		
 
+	
 				    
 	</div><!-- end container-->
+   <div class="footer">
+	  
+		   <center>
+			Powered by <a style="display: inline-block" href="https://github.com/graylinkim/sc2reader">sc2reader | </a>
+				<a href="/contacts">Contact</a> 
+			</center>
    
+	</div>
+   
+   
+
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
   </body>
+  
   <div class="hidden">
   	<!--   hidden form to submit from js to the guessresult page      -->
 	<form id="hiddenform" method="post" action="/analyse_replay">
     <input id="file-uploaded" type="hidden" name="file-uploaded" > 
 	</form>
   </div>
+ 	
+  
 </html>
