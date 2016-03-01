@@ -14,6 +14,7 @@ import estimator
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = path_abs+"replayuploaded"
+app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 ALLOWED_EXTENSIONS = set(["sc2replay"])
 
 m=pickle.load(open(path_abs+"../../save/dbserver","rb"))
@@ -366,7 +367,7 @@ def compare(filename,n,player):
 
     
 if __name__ == "__main__":
-	app.run(debug=True,host='0.0.0.0')  
+	app.run(debug=False,host='0.0.0.0')  
 #	app.run(debug=True,host='0.0.0.0')  
 
 
