@@ -55,7 +55,11 @@
 								document.getElementById("hiddenform").submit();
 							}
 						}
-			            }
+			            },
+			            error: function(resultat,status,errorT)
+			            {
+							$('#modal-body').html("An error occured, maybe the file is not a SC2 replay"); 
+						}
 			        });
 				//
 				
@@ -84,7 +88,7 @@
 			            data: data,
 			            success: function (response) 
 			            {
-							console.log(response)
+							console.log("testhaut"+response)
 							if( response=="extension error")
 							{	$('#test3').val("");
 								$('#modal-body').html("error with the file extension"); 
@@ -97,12 +101,16 @@
 
 								}
 								else{
-								document.getElementById("file-uploaded").value=response;
-								document.getElementById("hiddenform").submit();
-							}
-						}
+									document.getElementById("file-uploaded").value=response;
+									document.getElementById("hiddenform").submit();
+									}
+								}
 			                
-			            }
+			            },
+			            error: function(resultat,status,errorT)
+			            {
+							$('#modal-body').html("An error occured, maybe the file is not a SC2 replay"); 
+						}
 			        });
 				//
 				
@@ -142,7 +150,7 @@
 				    </div>
 				    <ul class="nav navbar-nav">
 				      <li class="active"><a href="/">Home</a></li>
-				      <li><a href="/liste_of_player">Players</a></li>
+				      <li><a href="/liste_of_player/all">Players</a></li>
 				
 				    </ul>
 				    <ul class="nav navbar-nav navbar-right btn-file">

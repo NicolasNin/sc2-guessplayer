@@ -24,9 +24,13 @@ def main():
 	m.DBs["all"].addDirectory("../replayofficial/HS12")
 	m.DBs["all"].addDirectory("../replayofficial/NW3")
 	m.DBs["all"].addDirectory("../replayofficial/dh")
+	m.DBs["all"].addDirectory("../Replays/replayFromRyanC/Replay Pack DHOpen Tours WCS Spring Championship/")
+	m.DBs["all"].addDirectory("../Replays/replayFromRyanC/IEM 10 Taipei Replaypack/")
+	m.DBs["all"].addDirectory("../Replays/replayFromRyanC/wcs-winter-2016/")
+# new replay
+#	m.DBs["all"].addDirectory("../replayofficial/azeazea")
 	#	m.DBs["all"].addDirectory("replayperso")
-	
-	pickle.dump(m,open("../save/dbserver","wb"))
+	pickle.dump(m,open("../save/dbservertestnewreplay","wb"))
 	
 
 if __name__ == '__main__':

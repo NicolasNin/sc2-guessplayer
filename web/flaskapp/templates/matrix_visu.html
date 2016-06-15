@@ -165,6 +165,7 @@ var svg = d3.select("#matrice").append("svg")
   function mouseover(p) {
     d3.selectAll(".row text").classed("active", function(d, i) { return i == p.y; });
     d3.selectAll(".column text").classed("active", function(d, i) { return i == p.x; });
+    console.log(nodes[p.x]);
   }
 
   function mouseout() {

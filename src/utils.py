@@ -16,7 +16,7 @@ def normalize_matrix(matrix):
 			for j in range(len(matrix[0])):
 				matrix[i][j]=float(matrix[i][j])/somme
 	else:
-		print(self.player_name,self.adversary,"empty")
+		print("empty")
 
 def normalize_dict(d):
 	 s=sum(d.values())

@@ -42,16 +42,14 @@ class userGuess(multipledb.multipleDB):
 		print("\nPlayer {0}({1}) in replay{2}:".format(g1.name_in_replay1,g1.race1,g1.path))
 		
 		for i in range(min(5,len(res1))):
-			print("Guess number {0} as {1} with value {2}|{4}({5})vs{6}({7}) the {8} on {9} from file {3}".format(
+			print("Guess number {0} as {1} with value {2}|{4}({5})vs{6}({7}) from file {3}".format(
 			i+1,res1[i][2].player1,
 			round(res1[i][1],2),
 			res1[i][2].path,
 			res1[i][2].player1,
 			res1[i][2].race1,
 			res1[i][2].player2,
-			res1[i][2].race2,
-			res1[i][2].date,
-			res1[i][2].mapsc2
+			res1[i][2].race2
 			))
 		print("------------------------------------------")
 	def guessDirectory(self,path,dbreference,coefMat=1,coefGap=4):

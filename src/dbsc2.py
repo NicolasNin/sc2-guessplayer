@@ -133,7 +133,7 @@ class dbsc2():
 			g1=self.addReplayFromData(path+"p1")
 			g2=self.addReplayFromData(path+"p2")
 		else:
-			print(path +"not yetconverted")
+			print(path +"not yetconverted2")
 			(g1,g2)=convert.convertReplay(path)
 			if g1!="error":
 				g1.calculateAllFeatures(self.limit_matrix,0,self.limit_apm)
@@ -145,7 +145,7 @@ class dbsc2():
 					if 	self.players[g1.player1][0].race1==g1.race1:
 						self.players[g1.player1].append(g1)
 					else:
-						g1.player1=g.player1+g1.race1[0].lower()
+						g1.player1=g1.player1+g1.race1[0].lower()
 						if g1.player1 not in self.players:
 							self.players[ g1.player1]=[]
 						self.players[g1.player1].append(g1)	

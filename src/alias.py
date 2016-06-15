@@ -47,9 +47,10 @@ alias=[['forgg','m\xc7\x82forgg','millforgg',"millsymbolforgg","mforgg"],
 ["nestea","imnestea"],
 ["alicia","axalicia"],
 ["slivko","steelmaker","vpbenqslivko:"],
-["courage","zoocourage"],
+["courage","zoocourage","colourdfirst"],
 ["oz","pkdoz"],
-["zhugeliang","wallfacer"]
+["zhugeliang","wallfacer"],
+["erik","olk"]
 ]
 
 barcode={

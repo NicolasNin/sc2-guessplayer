@@ -57,7 +57,7 @@ class multipleDB():
 			if result[i]==target[i]:
 					s+=1
 		return float(s)/len(result)	
-	def evaluateProba(self,db1,dbtest,method="manhattan",option=2,fail=False,maxGap=15,coefMat=1,coefGap=1,coefApm=1,coefFreq=1,coefMat3=0,puissance=1):
+	def evaluateProba(self,db1,dbtest,method="manhattan",option=2,fail=False,maxGap=15,coefMat=1,coefGap=1,coefApm=1,coefFreq=1,coefFirst=0,coefMat3=0,puissance=1):
 		#same as evaluate but now we return the dict of proba by using giveProba which is not a proba but the score min score for each player
 		if type(db1)==str:
 			db1=self.DBs[db1]
@@ -77,7 +77,7 @@ class multipleDB():
 				print (("player {0} is being given probas, number {1}"+str2).format(player,s))
 				
 				for game in dbtest.players[player]:
-					result.append(self.estimator.giveProba(game,method,option,maxGap,coefMat,coefGap,coefApm,coefFreq,coefMat3,puissance))
+					result.append(self.estimator.giveProba(game,method,option,maxGap,coefMat,coefGap,coefApm,coefFreq,coefMat3,coefFirst,puissance))
 					target.append(game)
 					
 		db1.calculateAC()			

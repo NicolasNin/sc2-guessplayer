@@ -1,55 +1,37 @@
-import sys,os
+import sys,os,hashlib
 from flask import Flask, render_template, request,redirect, url_for,jsonify
 from werkzeug import secure_filename
 import pickle
 path_abs=os.path.abspath(".")+"/"
-
-
 if path_abs=="/home/sc2guess/":
 		path_abs="/home/sc2guess/sc2-guessplayer/web/flaskapp/"
 sys.path.insert(0, path_abs+'/../../src')
+from divers import *
 import corelation
 import estimator
 
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = path_abs+"replayuploaded"
-app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
-ALLOWED_EXTENSIONS = set(["sc2replay"])
+app.config['MAX_CONTENT_LENGTH'] = 0.5 * 1024 * 1024
 
-m=pickle.load(open(path_abs+"../../save/dbserver","rb"))
-
-
-
+##some global value
+#m=pickle.load(open(path_abs+"../../save/dbserver","rb"))
+m=pickle.load(open(path_abs+"../../save/dbservertestnewreplayp3","rb"))
 dict_of_result={}
-def allowed_file(filename):
-    return '.' in filename and \
-			filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-EVENT=["Unknwown","WCS15S1","WCS15S2","WCS15S3","NW3","HS12","DH"]
-EventUrl=["","http://wiki.teamliquid.net/starcraft2/2015_WCS_Season_1/",
-"http://wiki.teamliquid.net/starcraft2/2015_WCS_Season_2",
-"http://wiki.teamliquid.net/starcraft2/2015_WCS_Season_3",
-"http://wiki.teamliquid.net/starcraft2/NationWars_III",
-"http://wiki.teamliquid.net/starcraft2/HomeStory_Cup/12",
-"http://wiki.teamliquid.net/starcraft2/2016_DreamHack_Open/Leipzig"]
 liste_player=[]
 for i in m.DBs["all"].players:
 	liste_player.append(i)
-def event(path):
-	if path[18:30]=="WCS15Season1":
-		return 1
-	if path[18:30]=="WCS15Season2":
-		return 2
-	if path[18:30]=="WCS15Season3":
-		return 3
-	if path[18:21]=="NW3":
-		return 4
-	if path[18:22]=="HS12":
-		return 5
-	if path[18:20]=="dh":
-		return 6
-	else:
-		return 0
+
+def getNumber(player,path):
+	if player in m.DBs["all"].players:
+		for g in range(len(m.DBs["all"].players[player])):
+			if m.DBs["all"].players[player][g].path==path:
+				return g
+	return "not found"
+
+@app.route('/complexsearch')
+def complex():
+	return render_template("complexguess.html")
 
 @app.route('/comparegroupsgraphe')
 def comparegroup2():
@@ -62,13 +44,10 @@ def comparegroup():
 def matrix(player,t):
 	player=getDBname(player)
 	return render_template("matrix_visu.html",player=player,t=t)
-	
 @app.route('/graphe/<player>/<t>')
 def graphe(player,t):
 	player=getDBname(player)
-	
 	return render_template("temgraph.html",player=player,t=t)
-
 
 @app.route('/matrix/<player>/<t>',methods=['POST','GET'])
 def corelPlayer(player,t):
@@ -100,10 +79,9 @@ def corelPlayer(player,t):
 	for (i,g1) in enumerate(l):
 		e=event(g1.path)
 		if flag:
-			a["nodes"].append({"name":g1.player2+"("+g1.race2+")","group":e,"event":str(EVENT[e])})
+			a["nodes"].append({"name":g1.player2+"("+g1.race2+")","group":e,"event":str(EVENT[e]),"path":g1.path})
 		else:
-			print("hererer")
-			a["nodes"].append({"name":g1.player1,"group":g1.player1,"event":str(EVENT[e])})
+			a["nodes"].append({"name":g1.player1,"group":g1.player1,"event":str(EVENT[e]),"path":g1.path})
 	for (i,g1) in enumerate(l):
 		
 		for (j,g2) in enumerate(l):
@@ -117,61 +95,12 @@ def corelPlayer(player,t):
 def echo(): 
     return "You said: " + request.form['text'] 
 
-def displayResultGuess(res1,g1):
-	ret_string=""
-	ret_string+="\nPlayer {0}({1}) in replay{2}:\n".format(g1.name_in_replay1,g1.race1,g1.path)
-	
-	for i in range(min(5,len(res1))):
-		ret_string+="Guess number {0} as {1} with value {2}|{4}({5})vs{6}({7}) the {8} on {9} from file {3}\n".format(
-		i+1,res1[i][2].player1,
-		round(res1[i][1],2),
-		res1[i][2].path,
-		res1[i][2].player1,
-		res1[i][2].race1,
-		res1[i][2].player2,
-		res1[i][2].race2,
-		res1[i][2].date,
-		res1[i][2].mapsc2
-		)
-	ret_string+="------------------------------------------\n"
 
-	return ret_string
-def getDBname(playername):
-		if playername=="Hero(CJ)":
-			return "hero(CJ)"
-		elif playername=="HerO(Liquid)":
-			return "HerO(Liquid)"
-		else:
-			return playername.lower()
-def probaarrache(x):
-	if x<=0.8:
-		return ( 95+5*((-1*x/0.8+1)*(-1*x/0.8+1) )	)
-	elif x<=1:
-		return (90+5*( (-5*x+5)*(-5*x+5) ))
-	elif x<=1.25:
-		return (30 + 60*(-4*x+5)*(-4*x+5))+1
-	elif x<=2:
-		return (30*(-4*x+8)*(-4*x+8)/9)+1
-	else:
-		return 2/x 
-def getNumber(player,path):
-	if player in m.DBs["all"].players:
-		for g in range(len(m.DBs["all"].players[player])):
-			if m.DBs["all"].players[player][g].path==path:
-				return g
-	return "not found"
-def getAllScore(g1,g2):
-	E=estimator.PPVEstimator()
-	d_hotkey=E.score(g1,g2,method="manhattan",option=2,maxgap=15,coefMat=1,coefGap=0,coefApm=0,coefFreq=0)
-	d_gap=E.score(g1,g2,method="manhattan",option=2,maxgap=15,coefMat=0,coefGap=4,coefApm=0,coefFreq=0)
-	d_apm=E.score(g1,g2,method="manhattan",option=1,maxgap=15,coefMat=0,coefGap=0,coefApm=1,coefFreq=0)
-	return(d_hotkey,d_gap,d_apm)
 @app.route('/analyse_replay', methods=['GET', 'POST'])
 def analyse():
 	a = request.form["file-uploaded"]
 	print("analyse replay",a)
 	print("is in dict", a in dict_of_result)
-	#return "analyse replay "+str(a)
 	if a in dict_of_result:
 		(res1,res2,g1,g2)=dict_of_result[a]
 	else:
@@ -184,7 +113,10 @@ def analyse():
 	path2=[]
 	number1=[]
 	number2=[]
-	for i in range(3):
+	if len(res1)==0:
+		return "not enough data"
+	print("res1",res1,len(res1))
+	for i in range(min(len(res1),3)):
 		(dh,dg,da)=getAllScore(g1,res1[i][2])
 		guess1.append(res1[i][2].player1)
 		(dh,dg,da)=getAllScore(g1,res1[i][2])
@@ -196,8 +128,6 @@ def analyse():
 		path2.append(res2[i][2].path[15:-12])
 		number1.append( getNumber(res1[i][2].player1,res1[i][2].path))
 		number2.append( getNumber(res2[i][2].player1,res2[i][2].path))
-		
-		
 		
 	return render_template('analyze.html',
 			nameinreplay1=g1.name_in_replay1,
@@ -212,32 +142,60 @@ def analyse():
 			path2=path2,
 			number1=number1,
 			number2=number2,
-			filename=a
+			filename=a,
+			max_=min(3,len(res1))
 			
 			)
 		
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
-	
+	print("DBS",m.DBs)
+	if "userReplay" in m.DBs:
+		print(m.DBs["userReplay"].players)
+	db="all"
+	coefMat=1
+	coefGap=4
+	coefApm=0
 	if request.method == 'POST':
 		file = request.files['sc2replay']
+		
+		if request.form!={}:
+	
+			if request.form['database']!="all":
+				if "userReplay" in m.DBs:
+					db="userReplay"
+			coefMat=0
+			coefGap=0
+			coefApm=0
+			if request.form['features']=="dh":
+				coefMat=1
+			if request.form['features']=="dg":
+				coefGap=4
+			if request.form['features']=="da":
+				coefApm=1
+					
 		if file and allowed_file(file.filename):
 			filename = secure_filename(file.filename)
-			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			if filename not in dict_of_result:
-				(res1,res2,g1,g2)=m.guessReplay(os.path.join(app.config['UPLOAD_FOLDER'], filename),"all",coefMat=1,coefGap=4,coefApm=0,coefFreq=0)
+			full_path=os.path.join(app.config['UPLOAD_FOLDER'], filename)
+			file.save(full_path)
+			hash_=(hashlib.md5(open(full_path, 'rb').read()).hexdigest())
+			print(hash_)
+			if hash_ not in dict_of_result:
+				(res1,res2,g1,g2)=m.guessReplay(os.path.join(app.config['UPLOAD_FOLDER'], filename),db,coefMat=coefMat,coefGap=coefGap,coefApm=coefApm,coefFreq=0)
 				if(res1=="error"):
 					return "error"
-				
-				dict_of_result[filename]=(res1,res2,g1,g2)
-				#return str(os.path.join(app.config['UPLOAD_FOLDER'], filename)) 
-			return filename
+				dict_of_result[hash_+db]=(res1,res2,g1,g2)
+			return hash_+db
 		else:
+			print("erroe ex")
 			return "extension error"
 	
-@app.route("/liste_of_player")
-def liste():
-	d=m.DBs["all"].players
+@app.route("/liste_of_player/<db>")
+def liste(db):
+	if db not in m.DBs:
+		d=m.DBs["all"].players
+	else:
+		d=m.DBs[db].players
 	l=[]
 	l2=[]
 	gamesnumber={}
@@ -246,8 +204,7 @@ def liste():
 		p2=p[0].upper()+p[1:]
 		l.append(p2)
 		gamesnumber[p2]=len(d[p])
-		#l.append((p2,len(d[p])))
-	l.sort()
+	#l.sort()
 	for i in l:
 		l2.append((i,gamesnumber[i] ))	
 	return render_template("liste_of_player.html",liste=l2)
@@ -267,9 +224,7 @@ def player(playername):
 	list_of_eventurl=[]
 	
 	#create auto corelation png
-
 	imagename="auto"+playername+".png"
-	
 	if not os.path.exists(path_abs+"static/img/corelation/"+imagename):
 		c=corelation.corelation()
 		db1=m.DBs["all"]
@@ -280,7 +235,6 @@ def player(playername):
 	for i in m.DBs["all"].players[getDBname(playername)]:
 		num+=1
 		list_of_number.append(num)
-	#	list_of_games.append(num)
 		list_of_player1.append(i.player1)
 		list_of_race1.append(i.race1)
 		list_of_player2.append(i.player2)
@@ -290,7 +244,6 @@ def player(playername):
 		list_of_eventurl.append(EventUrl[event(i.path)])
 		list_of_path_of_games.append(i.path[18:-12])
 		
-
 	path="img/corelation/"
 	return render_template("player.html",name=playername,liste_path_games=list_of_path_of_games,img_corel=path+imagename,
 	number=list_of_number,
@@ -335,8 +288,7 @@ def faq():
 	return render_template('FAQ.html')
 @app.route("/compare/<filename>/<n>/<player>")
 def compare(filename,n,player):
-	#we need to compute one replay against all of a player
-	#we need the info on the filename and the player
+
 	n=int(n)
 	if filename in dict_of_result:
 		if n==0 or n==1:
@@ -365,9 +317,13 @@ def compare(filename,n,player):
 	return render_template("testviz.html",n=n,data1=data1,data2=data2,data3=data3,match=match,name=player)
 
 
-    
+ 
+@app.errorhandler(413)
+def page_not_found(error):
+    return render_template('maxsize.html')  
+     
 if __name__ == "__main__":
-	app.run(debug=False,host='0.0.0.0')  
+	app.run(debug=True,host='0.0.0.0')  
 #	app.run(debug=True,host='0.0.0.0')  
 
 

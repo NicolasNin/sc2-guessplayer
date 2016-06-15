@@ -184,6 +184,8 @@ function miserables(miserables) {
   function mouseover(p) {
     d3.selectAll(".row text").classed("active", function(d, i) { return i == p.y; });
     d3.selectAll(".column text").classed("active", function(d, i) { return i == p.x; });
+    console.log(nodes[p.x].path);
+    console.log(nodes[p.y].path);
   }
 
   function mouseout() {
