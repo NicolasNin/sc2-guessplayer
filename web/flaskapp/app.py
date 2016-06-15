@@ -6,6 +6,7 @@ path_abs=os.path.abspath(".")+"/"
 if path_abs=="/home/sc2guess/":
 		path_abs="/home/sc2guess/sc2-guessplayer/web/flaskapp/"
 sys.path.insert(0, path_abs+'/../../src')
+sys.path.insert(0,path_abs+'/../../src/sc2reader')
 from divers import *
 import corelation
 import estimator
